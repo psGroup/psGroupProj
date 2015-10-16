@@ -50,22 +50,8 @@ git add *
 git commit -m "Initial commit of my project"
 git remote add origin https://github.com/psGroup/psGroupProj.git
 git push --all origin
-~                                                                               
-~                                                                               
-~                                                                               
-~                                                                               
-~                                                                               
-~                                                                               
-~                                                                               
-~                                                                               
-~                                                                               
-~                                                                               
-~                                                                               
-~                                                                               
-~                                                                               
-~                                                                               
-~                                                                               
-~                                                                               
-~                                                                               
-~                                                                               
--- INSERT --
+
+
+Connect to remote repo
+git clone https://github.com/psGroup/psGroupProj.git
+
