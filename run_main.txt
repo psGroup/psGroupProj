@@ -1,0 +1,9 @@
+compile:
+gcc -o main main.c
+
+Run:
+./main [input file]
+
+Check memory leaks:
+valgrind --leak-check=full --show-leak-kinds=all ./main [inputFile]
+
