@@ -1,0 +1,74 @@
+void printMap(struct_matrix gameLand, char initFileName[30]) {
+  static int fileID = 0;
+  int i, j;
+  FILE *fp;
+  char fileName[30] = { '\0' };
+  fileID++;
+  
+  strcpy(fileName, initFileName);
+
+  sprintf(fileName, "%s%d\0", fileName, fileID);
+  
+  fp=fopen(fileName, "w");
+  
+  for (i = 0; i < gameLand.x; i++)
+  {
+    for (j = 0; j < gameLand.y; j++) {
+      fprintf(fp, "%d ", (gameLand.map[i][j].area == LAND) ? 1 : 0 );
+    }
+    fprintf(fp, "\n");
+  }
+  
+  fclose(fp);
+  
+}
+
+void printHares(struct_matrix gameLand, char initFileName[30]) {
+  static int fileID = 0;
+  int i, j;
+  FILE *fp;
+  char fileName[30] = { '\0' };
+
+  fileID++;
+  
+  strcpy(fileName, initFileName);
+
+  sprintf(fileName, "%s%d\0", fileName, fileID);
+  
+  fp=fopen(fileName, "w");
+  
+  for (i = 0; i < gameLand.x; i++)
+  {
+    for (j = 0; j < gameLand.y; j++) {
+      fprintf(fp, "%.2f ", gameLand.map[i][j].hares);
+    }
+    fprintf(fp, "\n");
+  }
+  fclose(fp);
+  
+}
+
+void printPumas(struct_matrix gameLand, char initFileName[30]) {
+  static int fileID = 0;
+  int i, j;
+  FILE *fp;
+  char fileName[30] = { '\0' };
+
+  fileID++;
+    
+  strcpy(fileName, initFileName);
+
+  sprintf(fileName, "%s%d\0", fileName, fileID);
+  
+  fp=fopen(fileName, "w");
+  
+  for (i = 0; i < gameLand.x; i++)
+  {
+    for (j = 0; j < gameLand.y; j++) {
+      fprintf(fp, "%.2f ", gameLand.map[i][j].pumas);
+    }
+    fprintf(fp, "\n");
+  }
+  fclose(fp);
+  
+}
