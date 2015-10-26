@@ -1,0 +1,254 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
+
+enum enum_area{LAND, WATER};
+
+typedef struct cell {
+  enum enum_area area;
+  int pumas;
+  int hares;
+} struct_cell;
+
+typedef struct matrix {
+  int x;
+  int y;
+  struct_cell **map;
+} struct_matrix;
+
+struct_cell **dynamic_alloc_map(int x, int y) {
+
+  struct_cell **map;
+  int i;
+
+  map = (struct_cell**) malloc(sizeof(struct_cell*) * x);
+  if (map == NULL)
+  {
+    fprintf(stderr, "malloc faild\n");
+    exit(EXIT_FAILURE);
+  }
+
+  for (i = 0; i < x; i++)
+  {
+    map[i] = (struct_cell*) malloc(sizeof(struct_cell) * y);
+    if (map[i] == NULL)
+    {
+      fprintf(stderr, "malloc faild\n");
+      exit(EXIT_FAILURE);
+    }
+  }
+
+  return map;
+
+}
+
+void free_map(struct_matrix *gameLand) {
+  int i;
+  for (i = 0; i < gameLand->x; i++)
+  {
+    free(gameLand->map[i]);
+  }
+  free(gameLand->map);
+}
+
+void init_map(FILE *fp, struct_matrix *gameLand) {
+  char *line1 = NULL;
+  char *line2 = NULL;
+  char *token;
+  char *saveptr = NULL;
+  size_t len = 0;
+  ssize_t read;
+  int nx, ny, i, j;
+
+
+  if ((read = getline(&line1, &len, fp)) != -1)
+  {
+    token = strtok_r(line1, " ", &saveptr);
+    nx = atoi(token);
+    token = strtok_r(NULL, " ", &saveptr);
+    ny = atoi(token);
+  }
+  free(line1);
+  printf("\\> nx: %d\tny: %d\n", nx, ny);
+
+  (*gameLand).x = nx;
+  (*gameLand).y = ny;
+  gameLand->map = dynamic_alloc_map(nx, ny);
+
+  i = j = 0;
+  while((read = getline(&line2, &len, fp)) != -1)
+  {
+    j = 0;
+    for (token = strtok_r(line2, " ", &saveptr); \
+         token != NULL; \
+         token = strtok_r(NULL, " ", &saveptr))
+    {
+      if (atoi(token) == 1)
+      {
+        if (j < ny)
+          (gameLand->map)[i][j++].area = LAND;
+      }
+      else
+      {
+        if (j < ny)
+          (gameLand->map)[i][j++].area = WATER;
+      }
+//      printf("%d - %d
+    }
+    i++;
+  }
+
+  free(line2);
+  printf("is here\n");
+}
+
+
+void printMap(struct_matrix gameLand, char initFileName[30]) {
+  static int fileID = 0;
+  int i, j;
+  FILE *fp;
+  char fileName[30] = { '\0' };
+/*  char initFileName[30] = { '\0'};
+  initFileName[0] = 'm';
+  initFileName[1] = 'a';
+  initFileName[2] = 'p';
+*/  fileID++;
+  
+  strcpy(fileName, initFileName);
+
+  sprintf(fileName, "%s%d\0", fileName, fileID);
+  
+  fp=fopen(fileName, "w");
+  
+  for (i = 0; i < gameLand.x; i++)
+  {
+    for (j = 0; j < gameLand.y; j++) {
+      fprintf(fp, "%d ", (gameLand.map[i][j].area == LAND) ? 1 : 0 );
+    }
+    fprintf(fp, "\n");
+  }
+  
+  fclose(fp);
+  
+}
+
+void printHares(struct_matrix gameLand, char initFileName[30]) {
+  static int fileID = 0;
+  int i, j;
+  FILE *fp;
+  char fileName[30] = { '\0' };
+/*  char initFileName[30] = { '\0'};
+  initFileName[0] = 'h';
+  initFileName[1] = 'a';
+  initFileName[2] = 'r';
+  initFileName[3] = 'e';
+  initFileName[4] = 's';
+  */
+  fileID++;
+  
+  strcpy(fileName, initFileName);
+
+  sprintf(fileName, "%s%d\0", fileName, fileID);
+  
+  fp=fopen(fileName, "w");
+  
+  for (i = 0; i < gameLand.x; i++)
+  {
+    for (j = 0; j < gameLand.y; j++) {
+      fprintf(fp, "%.2f ", gameLand.map[i][j].hares);
+    }
+    fprintf(fp, "\n");
+  }
+  fclose(fp);
+  
+}
+
+void printPumas(struct_matrix gameLand, char initFileName[30]) {
+  static int fileID = 0;
+  int i, j;
+  FILE *fp;
+  char fileName[30] = { '\0' };
+/*  char initFileName[30] = { '\0'};
+  initFileName[0] = 'p';
+  initFileName[1] = 'u';
+  initFileName[2] = 'm';
+  initFileName[3] = 'a';
+  initFileName[4] = 's';
+*/
+  fileID++;
+    
+  strcpy(fileName, initFileName);
+
+  sprintf(fileName, "%s%d\0", fileName, fileID);
+  
+  fp=fopen(fileName, "w");
+  
+  for (i = 0; i < gameLand.x; i++)
+  {
+    for (j = 0; j < gameLand.y; j++) {
+      fprintf(fp, "%.2f ", gameLand.map[i][j].pumas);
+    }
+    fprintf(fp, "\n");
+  }
+  fclose(fp);
+  
+}
+
+
+int main(int argc, char **argv) {
+
+  char *inputFile = NULL;
+  FILE *fp =NULL;
+  struct_matrix gameLand;
+  int i, j;
+  if (argc != 2)
+  {
+    fprintf(stderr, "No input file\n");
+    return -1;
+  }
+
+  inputFile = strdup(argv[1]);
+  if (inputFile == NULL)
+  {
+    fprintf(stderr, "\\> function srtdup fail to allocate space and return \
+            NULL.\n");
+    return -1;
+  }
+  printf("\\> input file -->%s<--\n", inputFile);
+
+  fp = fopen(inputFile, "r+");
+  if (fp == NULL)
+  {
+    fprintf(stderr, "\\> function fopen fail to open the file: %s\n", \
+            inputFile);
+    return -1;
+  }
+
+  init_map(fp, &gameLand);
+
+  fclose(fp);
+
+//print
+/*
+  for (i = 0; i < gameLand.x; i++) {
+    for(j = 0; j < gameLand.y; j++) {
+      printf("%d ", gameLand.map[i][j].area == WATER ? 0 : 1);
+    }
+    printf("\n");
+  }
+*/
+  printMap(gameLand, "mapp");
+printf("------------------------------------------------------------------\n");
+  printHares(gameLand, "haress");
+printf("------------------------------------------------------------------\n");
+  printPumas(gameLand, "pumasss");
+printf("------------------------------------------------------------------\n");
+
+  free_map(&gameLand);
+
+  free(inputFile);
+
+  printf("Reach the end\n");
+  return 0;
+}
