@@ -4,3 +4,4 @@
 2.	Correct output - ppm file
 3.	Unit testing
 4.	Makefile
+5.  Handle kill signal
