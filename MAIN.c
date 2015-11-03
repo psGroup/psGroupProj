@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <time.h>
 
 double dt = 0.4;
 double r = 0.08;
@@ -14,6 +15,11 @@ double crit_hares_lower = 0.1;
 double crit_hares_upper = 5.0;
 double crit_pumas_lower = 0.1;
 double crit_pumas_upper = 5.0;
+// setting the colour scales for the output ppm files
+double min_colour = 70.0;
+double scale_pumas = 37.2;//(256.0 - min_colour)/crit_pumas_upper;
+double scale_hares = 37.2;//(256.0 - min_colour)/crit_hares_upper;
+
 
 enum enum_area{LAND, WATER};
 
@@ -124,8 +130,11 @@ void init_map(FILE *fp, struct_matrix *gameLand) {
         if (atoi(token) == 1)
         {
             gameLand->map[i][j].area = LAND;
-            gameLand->map[i][j].pumas = 3.0;
-            gameLand->map[i][j].hares = 3.0;
+// We need to gaurantee that the initial densities are randomly distributed between 0.1 (our lower bound, below which the animal dies) and upper (at which they saturate). 
+// (upper-lower)*rand ensures a random number between 0 and upper_limit. 
+// we add the lower limit to make it a random number between the two limits
+            gameLand->map[i][j].pumas = ((crit_pumas_upper - crit_pumas_lower) * rand()/RAND_MAX )  + crit_pumas_lower;
+            gameLand->map[i][j].hares = ((crit_hares_upper - crit_hares_lower) * rand()/RAND_MAX )  + crit_hares_lower;
             j++;
         }
         else
@@ -223,6 +232,12 @@ void mainLoop(struct_matrix *gameLand, struct_matrix *newGameLand) {
 				if (gameLand->map[i][j].area == LAND) {
 					newGameLand->map[i][j].hares = haresNewValue(gameLand, i ,j);
 					newGameLand->map[i][j].pumas = pumasNewValue(gameLand, i ,j);
+					
+					// if statements to check critical densities
+					if(gameLand->map[i][j].hares < crit_hares_lower){gameLand->map[i][j].hares = 0.0;}
+					else if(gameLand->map[i][j].hares > crit_hares_upper){gameLand->map[i][j].hares = crit_hares_upper;}
+					if(gameLand->map[i][j].pumas < crit_pumas_lower){gameLand->map[i][j].pumas = 0.0;}
+					else if(gameLand->map[i][j].pumas > crit_hares_upper){gameLand->map[i][j].pumas = crit_pumas_upper;}
 				}
 			}
 		}
@@ -246,9 +261,9 @@ void printPPM(struct_matrix *gameLand) {
   sprintf(togetherFileName, "%s%d.ppm", togetherFileName, fileID);
   fpTogether=fopen(togetherFileName, "w");
 
-  fprintf(fpHares, "P6\n%d %d\n255\n", gameLand->y - 2, gameLand->x - 2); // width = 400, height = 400
-  fprintf(fpPumas, "P6\n%d %d\n255\n", gameLand->y - 2, gameLand->x - 2);
-  fprintf(fpTogether, "P6\n%d %d\n255\n", gameLand->y - 2, gameLand->x - 2);
+  fprintf(fpHares, "P3\n%d %d\n255\n", gameLand->y - 2, gameLand->x - 2); // width = 400, height = 400
+  fprintf(fpPumas, "P3\n%d %d\n255\n", gameLand->y - 2, gameLand->x - 2);
+  fprintf(fpTogether, "P3\n%d %d\n255\n", gameLand->y - 2, gameLand->x - 2);
 
   for (i = 1; i < (gameLand->x)-1; i++)
   {
@@ -256,20 +271,23 @@ void printPPM(struct_matrix *gameLand) {
 //      for (k = 0; k < 8; k++) {
         if (gameLand->map[i][j].area == LAND) {
 //          for (ki = 0; ki < 8; ki++) {
-            fprintf(fpHares, "%c%c%c", (int)((gameLand->map[i][j].hares * 100)), 10, 10);
-            fprintf(fpPumas, "%c%c%c", 10, (int)((gameLand->map[i][j].pumas * 100)), 10);
-            fprintf(fpTogether, "%c%c%c", (int)((gameLand->map[i][j].hares * 100)), (int)(255 - (gameLand->map[i][j].pumas * 100)), 10);
+            fprintf(fpHares, "%d %d %d\t", (int)((gameLand->map[i][j].hares * 100)), 0, 0);//scale_hares + min_colour)), 0, 0);
+            fprintf(fpPumas, "%d %d %d\t", 0, 0, (int)((gameLand->map[i][j].pumas * 100)), 0, 0);//scale_pumas + min_colour)));
+            fprintf(fpTogether, "%d %d %d\t", (int)((gameLand->map[i][j].hares * 100/*scale_hares + min_colour*/)), 0, (int)(256 - (gameLand->map[i][j].pumas * 100)));// scale_pumas + min_colour)));
 //          }
         }
         else {
 //          for (ki = 0; ki < 8; ki++) {
-            fprintf(fpHares, "%c%c%c", 41, 73, 178);
-            fprintf(fpPumas, "%c%c%c", 41, 73, 178);
-            fprintf(fpTogether, "%c%c%c", 41, 73, 178);
+            fprintf(fpHares, "%d %d %d\t", 41, 73, 178);
+            fprintf(fpPumas, "%d %d %d\t", 41, 73, 178);
+            fprintf(fpTogether, "%d %d %d\t", 41, 73, 178);
 //          }
         }
 //      }
     }
+    fprintf(fpHares, "\n");
+    fprintf(fpPumas, "\n");
+    fprintf(fpTogether, "\n");
   }
   fclose(fpHares);
   fclose(fpPumas);
@@ -333,7 +351,7 @@ void printHares(struct_matrix *gameLand) { //}, char initFileName[30]) { //246, 
   static int fileID = 0;
   int i, j;
   FILE *fp;
-  char fileName[30] = { "haresValues/whatEver.txt" };
+  char fileName[30] = { "haresValues/hares.txt" };
 
   fileID++;
 
@@ -353,6 +371,31 @@ void printHares(struct_matrix *gameLand) { //}, char initFileName[30]) { //246, 
 
 }
 
+
+void printPumas(struct_matrix *gameLand) { //}, char initFileName[30]) { //246, 15, 15
+  static int fileID = 0;
+  int i, j;
+  FILE *fp;
+  char fileName[30] = { "pumasValues/pumas.txt" };
+
+  fileID++;
+
+  sprintf(fileName, "%s%d", fileName, fileID);
+
+  fp=fopen(fileName, "w");
+
+  for (i = 0; i < gameLand->x; i++)
+  {
+    for (j = 0; j < gameLand->y; j++) {
+      fprintf(fp, "%.2f ", gameLand->map[i][j].pumas);
+//      fprintf(fp, "%c %c %c", gameLand.map[i][j].hares * 10, 10, 10);
+    }
+    fprintf(fp, "\n");
+  }
+  fclose(fp);
+
+}
+
 int main(int argc, char **argv) {
 
   char *inputFile = NULL;
@@ -363,6 +406,7 @@ int main(int argc, char **argv) {
 
   int i, j;
   double t;
+  srand(time(NULL));
 
   //Check if argv 2 exist
   if (argc != 2)
@@ -411,6 +455,9 @@ int main(int argc, char **argv) {
 
 	for (t = 0.0;  t < 500.0; t += dt) {
 		mainLoop(gameLand, newGameLand);
+		printPPM(gameLand);
+	  printHares(gameLand);
+	  printPumas(gameLand);
 		//swap the arrays
     swap = gameLand->map;
     gameLand->map = newGameLand->map;
@@ -421,8 +468,9 @@ int main(int argc, char **argv) {
 
 //	  print_pumas(gameLand);
 //	  printf("------------------------------------------------------------\n");
-	  printPPM(gameLand);
-	  printHares(gameLand);
+//	  printPPM(gameLand);
+	//  printHares(gameLand);
+	  //printPumas(gameLand);
 	}
 
   //free programme matrix
