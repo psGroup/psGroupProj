@@ -28,12 +28,12 @@ double haresNeighboursCells(const struct_matrix *gameLand, int i, int j) {
 double haresNewValue(struct_matrix *gameLand, int i, int j) {
   double oldValue = gameLand->map[i][j].hares;
   double newValue = 0.0;
-  double neibarsHaresValues = haresNeighboursCells(gameLand, i, j);
-  double neibarsLandCells = landNeighboursCells(gameLand, i, j);
+  double NeighboursHaresValues = haresNeighboursCells(gameLand, i, j);
+  double NeighboursLandCells = landNeighboursCells(gameLand, i, j);
   double randomWalk = 0.0;
 
   //randomWalk
-  randomWalk = k * (neibarsHaresValues - (neibarsLandCells * oldValue));
+  randomWalk = k * (NeighboursHaresValues - (NeighboursLandCells * oldValue));
 
   newValue = ((r*oldValue) - a * oldValue * gameLand->map[i][j].pumas);
   newValue += randomWalk;
@@ -53,12 +53,12 @@ double pumasNeighboursCells(const struct_matrix *gameLand, int i, int j) {
 double pumasNewValue(struct_matrix *gameLand, int i, int j) {
   double oldValue = gameLand->map[i][j].pumas;
   double newValue = 0.0;
-  double neibarsPumasValues = pumasNeighboursCells(gameLand, i, j);
-  double neibarsLandCells = landNeighboursCells(gameLand, i, j);
+  double NeighboursPumasValues = pumasNeighboursCells(gameLand, i, j);
+  double NeighboursLandCells = landNeighboursCells(gameLand, i, j);
   double randomWalk = 0.0;
 
   //randomWalk
-  randomWalk = l * (neibarsPumasValues - (neibarsLandCells * oldValue));
+  randomWalk = l * (NeighboursPumasValues - (NeighboursLandCells * oldValue));
 
   newValue = (b*oldValue * gameLand->map[i][j].hares) - m * oldValue;
   newValue += randomWalk;

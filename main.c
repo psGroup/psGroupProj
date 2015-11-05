@@ -25,7 +25,7 @@ struct_cell **dynamic_alloc_map(int x, int y) {
   map = (struct_cell**) malloc(sizeof(struct_cell*) * x);
   if (map == NULL)
   {
-    fprintf(stderr, "malloc faild\n");
+    fprintf(stderr, "malloc failed\n");
     exit(EXIT_FAILURE);
   }
 
@@ -100,7 +100,7 @@ void init_map(FILE *fp, struct_matrix *gameLand) {
 //      printf("%d - %d
     }
     i++;
-    if (i > 
+    if (i >
   }
 
   free(line2);

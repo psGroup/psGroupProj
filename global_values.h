@@ -25,4 +25,3 @@ extern double scale_hares;
 
 
 #endif /* GLOBAL_VALUES */
-

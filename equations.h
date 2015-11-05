@@ -1,7 +1,7 @@
 #ifndef EQUATIONS_H
 #define EQUATIONS_H
 
-#include "dataStructiars.h"
+#include "dataStructures.h"
 #include "global_values.h"
 /** \fn landNeighboursCells
  * \brief  brief description of what the fucntion does
@@ -92,5 +92,3 @@ double pumasNewValue(struct_matrix *gameLand, int i, int j);
 void mainLoop(struct_matrix *gameLand, struct_matrix *newGameLand);
 
 #endif
-
-
