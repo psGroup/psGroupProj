@@ -1,20 +1,25 @@
 # Compiles the main file, displays ppms
-all : target run
+all : directories target run
 
-#doxygenT: doxygenfinaltemplate.c
-	#doxygen doxygenfinaltemplate.c doxygenT 
+directories:
+	mkdir -p haresDensity
+	mkdir -p haresPPM
+	mkdir -p pumasPPM
+	mkdir -p pumasDensity
+	mkdir -p togetherPPM
 
-compiler: *.c
+target: *.c
 	gcc -o target *.c -I.
 
-run: target
-	./target Test.dat
+#.PHONY : run
+#run: target
+#	./target Test.dat
 
-# type "make clean" into the command line to clear the contents of the data directories
+# type "make clean" into the command line to clear the directories
 .PHONY : clean
 clean :
-		rm -f haresOut/*
-		rm -f haresValues/*
-		rm -f pumasOut/*
-		rm -f pumasValues/*
-		rm -f togetherOut/*
+		rm -r haresDensity
+		rm -r haresPPM
+		rm -r pumasDensity
+		rm -r pumasPPM
+		rm -r togetherPPM
