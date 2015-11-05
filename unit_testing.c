@@ -209,25 +209,44 @@ TEST test_pumas_neighbours(void){
 } 
 
 
-/*
+
 TEST test_ppm_print(){
 //	FILE *fpHares, *fpPumas, 
 	char *hares = "test_hares_directory";
 	char *pumas = "test_pumas_directory";
+	char *hares_file = "test_hares_directory/hares1.ppm";
+	char *pumas_file = "test_hares_directory/pumas1.ppm";
+	int test=0;
 	struct_matrix *test_matrix = build_matrix();
 	printPPM(test_matrix, hares, pumas);
 	FILE *fpHares, *fpPumas; 
-	fpHares=fopen(haresFileName, "w");
+	//test that the hares output is created
+	fpHares=fopen(hares_file, "w");
+	if(fpHares == NULL){
+	test += 1;
 	}
-*/
+	ASSERT(test==0);
+
+	//test that the pumas output is created
+	fpHares=fopen(pumas_file, "w");
+	if(fpHares == NULL){
+	test += 1;
+	}
+	ASSERT(test==0);
+
+
+	PASS();
+	}
+
 SUITE(suite){
-//RUN_TEST(test_the_neighbour_calculation);
-//RUN_TEST(test_hares_neighbours);
-//RUN_TEST(test_pumas_neighbours);
-//RUN_TEST(test_hares_update);
-//RUN_TEST(test_pumas_update);
-//RUN_TEST(test_main_loop);
-//RUN_TEST(test_init_map);
+RUN_TEST(test_the_neighbour_calculation);
+RUN_TEST(test_hares_neighbours);
+RUN_TEST(test_pumas_neighbours);
+RUN_TEST(test_hares_update);
+RUN_TEST(test_pumas_update);
+RUN_TEST(test_main_loop);
+RUN_TEST(test_init_map);
+RUN_TEST(test_ppm_print);
 
 }
 
