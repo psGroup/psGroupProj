@@ -5,15 +5,13 @@
 #include "printFunctions.h"
 
 void printPPM(struct_matrix *gameLand, char *hares_directory, 
-					char *pumas_directory, char *together_directory) {
+					char *pumas_directory, char *together_directory, configurations configs) {
   
    static int fileID = 0;
-  int i, j, k, ki;
-  double crit_hares_upper = 5.0;//< Upper critical limit for pumas 
-  double crit_pumas_upper = 5.0;//< Upper critical limit for pumas 
-  double min_colour = 70.0;
-  double scale_pumas = (256.0 - min_colour)/crit_pumas_upper;
-  double scale_hares = (256.0 - min_colour)/crit_hares_upper;
+  int i, j;
+   
+  double scale_pumas = (256.0 - configs.min_colour)/configs.crit_pumas_upper;
+  double scale_hares = (256.0 - configs.min_colour)/configs.crit_hares_upper;
   //printf("scale_hares %lf\n", scale_hares);
 
   FILE *fpHares, *fpPumas, *fpTogether;
@@ -55,8 +53,8 @@ void printPPM(struct_matrix *gameLand, char *hares_directory,
 //      for (k = 0; k < 8; k++) {
         if (gameLand->map[i][j].area == LAND) {
 //          for (ki = 0; ki < 8; ki++) {
-            pumas_ppm = (int)(((gameLand->map[i][j].pumas * scale_pumas)) + min_colour - 20); // this makes it more easily readable when we enter it in the print statment
-            hares_ppm = (int)(((gameLand->map[i][j].hares * scale_hares)) + min_colour - 20);
+            pumas_ppm = (int)(((gameLand->map[i][j].pumas * scale_pumas)) + configs.min_colour - 20); // this makes it more easily readable when we enter it in the print statment
+            hares_ppm = (int)(((gameLand->map[i][j].hares * scale_hares)) + configs.min_colour - 20);
             //printf("hares_ppm %d", hares_ppm);
 
             fprintf(fpHares, "%d %d %d\t", pumas_ppm, 0, 0);
@@ -84,7 +82,7 @@ void printPPM(struct_matrix *gameLand, char *hares_directory,
 
 void printMapToImg(struct_matrix *gameLand, char initFileName[30]) {
   static int fileID = 0;
-  int i, j, k, ki;
+  int i, j;
   FILE *fp;
   char fileName[30] = { '\0' };
 
