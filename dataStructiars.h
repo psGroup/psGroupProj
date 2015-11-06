@@ -87,6 +87,6 @@ void free_map(struct_matrix *gameLand);
  *  \return Void.
  */
 
-void init_map(FILE *fp, struct_matrix *gameLand);
+int init_map(FILE *fp, struct_matrix *gameLand);
 
 #endif /* DATA_STRUCTIARS */
