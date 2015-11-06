@@ -1,12 +1,10 @@
 /** \file printFunctions.h
- *  \brief Explain
- *
- *   explain
+ *  \brief Header file for printing functions
  *
  *  \author B083194
  *  \author B084292
- *  \author B
- *  \author B
+ *  \author B082906
+ *  \author B088321
  *  \date 06/11/12
  *  \bug No known bugs.
  */
@@ -17,26 +15,11 @@
 
 #include "dataStructiars.h"
 
-/** \fn increace
- * \brief  brief description of what the fucntion does
- *
- *
- * A more detailed description could go here
- *
- *
- *
- *
- */
 
-int increace(float one/**<[in] Explain */, float two/**<[in] Explain */);
+int increace(float one, float two);
 
 /** \fn printPPM
- * \brief  brief description of what the fucntion does
- *
- *
- * A more detailed description could go here
- *
- *
+ * \brief  Prints ppms files
  *
  *
  */
@@ -45,12 +28,7 @@ void printPPM(struct_matrix *gameLand/**<[in] Explain */, char *hares_directory/
 					 char *pumas_directory/**<[in] Explain */, char *together_directory/**<[in] Explain */, configurations configs/**<[in] Explain */);
 
 /** \fn printMapToImg
- * \brief  brief description of what the fucntion does
- *
- *
- * A more detailed description could go here
- *
- *
+ * \brief  Prints entire map area
  *
  *
  */
@@ -58,12 +36,7 @@ void printPPM(struct_matrix *gameLand/**<[in] Explain */, char *hares_directory/
 void printMapToImg(struct_matrix *gameLand, char initFileName[30]);
 
 /** \fn printLandAvg
- * \brief  brief description of what the fucntion does
- *
- *
- * A more detailed description could go here
- *
- *
+ * \brief  Print average hares and pumas densities over land grid points
  *
  *
  */
@@ -72,11 +45,7 @@ void printMapToImg(struct_matrix *gameLand, char initFileName[30]);
 void printLandAvg(FILE *fp, double t, double avgHaresLand, double avgPumasLand);
 
 /** \fn printGridAvg
- * \brief  brief description of what the fucntion does
- *
- *
- * A more detailed description could go here
- *
+ * \brief  Print average hares and pumas densities over entire grid.
  *
  *
  *
