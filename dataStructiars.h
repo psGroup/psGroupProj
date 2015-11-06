@@ -1,4 +1,4 @@
-/** \file dataStructiars.c
+/** \file dataStructiars.h
  *  \brief Sets up data arrays
  *
  *  \author B083194
