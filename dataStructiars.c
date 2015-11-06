@@ -62,11 +62,10 @@ void free_map(struct_matrix *gameLand) {
 
 }
 
-int checkIfNumber(char *str) {
-    int length = strlen (str);
+int checkIfNumber(char *str, size_t len) {
     int i;
 
-    for (i=0;i<length; i++) {
+    for (i=0;i<len; i++) {
     	  if (str[i] == '\n') {
     	  	return 2;
     	  	}
@@ -106,10 +105,10 @@ int init_map(FILE *fp, struct_matrix *gameLand, configurations configs) {
   if ((read = getline(&line1, &len, fp)) != -1)
   {
     token = strtok_r(line1, " ", &saveptr);
-   	if (checkIfNumber(token) == -1) return -1;
+   	if (checkIfNumber(token, len) == -1) return -1;
     gameLand->y = atoi(token) + 2;
     token = strtok_r(NULL, " ", &saveptr);
-   	if (checkIfNumber(token) == -1) return -1;
+   	if (checkIfNumber(token, len) == -1) return -1;
     gameLand->x = atoi(token) + 2;
   }
   free(line1);
