@@ -79,4 +79,6 @@ void free_map(struct_matrix *gameLand);
 
 int init_map(FILE *fp, struct_matrix *gameLand, configurations configs);
 
+int checkIfNumber(char *str, size_t len);
+
 #endif /* DATA_STRUCTIARS */
