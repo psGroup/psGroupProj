@@ -1,10 +1,29 @@
+/** \file dataStructiars.c
+ *  \brief Explain
+ *
+ *
+ *  \author B083194
+ *  \author B084292
+ *  \author B082906
+ *  \author B088321
+ *  \date 06/11/12
+ *  \bug No known bugs.
+ */
+
 #include "dataStructiars.h"
 #include <string.h>
 #include <stdlib.h>
 #include <ctype.h>
 #include "global_values.h"
 
-struct_cell **dynamic_alloc_map(int x, int y) {
+/** 
+ * 
+ * dynamically allocating memory to a map 
+ * where we will input values for land/water, 
+ * hare and puma densities
+ */
+
+struct_cell **dynamic_alloc_map(int x/**<[in] number of rows allocated memory  */, int y/**<[in] number of columns allocated memory  */) {
 
   struct_cell **map;
   int i;
@@ -16,16 +35,12 @@ struct_cell **dynamic_alloc_map(int x, int y) {
     exit(EXIT_FAILURE);
   }
 
-  /**
-  *Give a brief description of what is going on here
-  */
-
   for (i = 0; i < x; i++)
   {
     map[i] = (struct_cell*) malloc(sizeof(struct_cell) * y);
     if (map[i] == NULL)
     {
-      fprintf(stderr, "malloc failed\n");
+      fprintf(stderr, "malloc failed\n");/**<[in] We must test that the memory allocation has worked correctly  */
       exit(EXIT_FAILURE);
     }
   }
@@ -34,7 +49,9 @@ struct_cell **dynamic_alloc_map(int x, int y) {
 
 }
 
-
+/**
+* function to deallocate memory when we no longer need it
+*/
 void free_map(struct_matrix *gameLand) {
   int i;
 
@@ -42,8 +59,6 @@ void free_map(struct_matrix *gameLand) {
   {
     free(gameLand->map[i]);
   }
-  //TODO check that
-//  free(gameLand->map);
 
 }
 
@@ -64,7 +79,21 @@ int checkIfNumber(char *str) {
     return 0;
 }
 
-int init_map(FILE *fp, struct_matrix *gameLand, configurations configs) {
+
+/** \fn init_map
+ * \brief  Initialise map for from given matrix
+ *
+ * When we pass in a binary file indicating land/water,
+ * this function turns it into a matrix of structs, each of 
+ * which contains an element for land/water, a random density of hares,
+ * and a random density of pumas. 
+ * We also add halo data: an extra edge of all water, so that our functions all work correctly. 
+ * 
+ * \return n
+ *
+ */
+
+int init_map(FILE *fp, struct_matrix *gameLand/**<[in] explain  */, configurations configs/**<[in] explain  */) {
   char *line1 = NULL;
   char *line2 = NULL;
   char *token;
@@ -76,7 +105,6 @@ int init_map(FILE *fp, struct_matrix *gameLand, configurations configs) {
   * \brief talk awhat happens next
   */
 
-  //TODO add coments
   if ((read = getline(&line1, &len, fp)) != -1)
   {
     token = strtok_r(line1, " ", &saveptr);
@@ -93,7 +121,7 @@ int init_map(FILE *fp, struct_matrix *gameLand, configurations configs) {
   printf("Columns:\t%d\n", gameLand->y);
 
   /**
-  * \brief talk awhat happens next
+  * apply halo data - ie add a row and column to each end, filled with type water. 
   */
 
   for (i = 0; i < gameLand->x; i++)
@@ -129,9 +157,11 @@ int init_map(FILE *fp, struct_matrix *gameLand, configurations configs) {
         {
        	if (checkIfNumber(token) == -1) return -2;
             gameLand->map[i][j].area = LAND;
-// We need to gaurantee that the initial densities are randomly distributed between 0.1 (our lower bound, below which the animal dies) and upper (at which they saturate).
-// (upper-lower)*rand ensures a random number between 0 and upper_limit.
-// we add the lower limit to make it a random number between the two limits
+/**
+ * We need to gaurantee that the initial densities are randomly distributed between 0.1 (our lower bound, below which the animal dies) and upper (at which they saturate).
+ * (upper-lower)*rand ensures a random number between 0 and upper_limit.
+ * we add the lower limit to make it a random number between the two limits
+*/
             gameLand->map[i][j].pumas = ((configs.crit_pumas_upper - configs.crit_pumas_lower) * rand()/RAND_MAX )  + configs.crit_pumas_lower;
             gameLand->map[i][j].hares = ((configs.crit_hares_upper - configs.crit_hares_lower) * rand()/RAND_MAX )  + configs.crit_hares_lower;
             j++;
