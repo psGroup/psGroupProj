@@ -1,0 +1,15 @@
+dt 0.4
+r 0.08
+a 0.04
+b 0.02
+m 0.06
+k 0.2
+l 0.2
+T 5.0
+crit_hares_lower 0.1
+crit_hares_upper 5.0
+crit_pumas_lower 0.1
+crit_pumas_upper 5.0
+min_colour 70
+land_number 5
+grid_number 6
