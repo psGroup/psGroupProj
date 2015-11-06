@@ -1,5 +1,5 @@
 /** \file equations.c
- *  \brief Explain
+ *  \brief Sets up partial differential equations spatial loop.
  *
  *
  *  \author B083194
