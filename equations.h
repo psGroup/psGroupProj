@@ -17,11 +17,7 @@
 #include "global_values.h"
 /** 
  * \fn landNeighboursCells
- * \brief  brief description of what the fucntion does
- *
- *
- * A more detailed description could go here
- *
+ * \brief  Calculate number of nearest neighbour land cells 
  *
  *  \return n.
  */
@@ -29,12 +25,7 @@
 double landNeighboursCells(const struct_matrix *gameLand/**< [in] docs for input parameter v. */, int i/**< [in] docs for input parameter v. */, int j/**< [in] docs for input parameter v. */);
 
 /** \fn haresNeighboursCells
- * \brief  brief description of what the fucntion does
- *
- *
- * A more detailed description could go here
- *
- *
+ * \brief  Sums total hares density from nearest neighbours
  *  \return Void.
  */
 
@@ -53,21 +44,15 @@ double haresNewValue(struct_matrix *gameLand, int i, int j, \
 		configurations configs);
 
 /** \fn pumasNeighboursCells
- * \brief  brief description of what the fucntion does
- *
- * A more detailed description could go here
- *
+ * \brief  Sums total pumas density from nearest neighbours
  *
  */
 
 double pumasNeighboursCells(const struct_matrix *gameLand, int i, int j);
+
 /** \fn pumasNewValue
- * \brief  brief description of what the fucntion does
- * \fn pumasNewValue
- *
- * A more detailed description could go here
- *
- *
+ * \brief  Calculates the updated cell value for pumas
+
  *  \return newValue.
  */
 
@@ -75,11 +60,10 @@ double pumasNewValue(struct_matrix *gameLand, int i, int j, \
                             configurations configs);
 
 /** \fn mainLoop
- * \brief  brief description of what the fucntion does
+ * \brief  Primary spatial iterative update
  *
- *
- * A more detailed description could go here
- *
+ * Loops over all grid points and calculates the new values
+ * for hares and pumas, if the cell is on land. 
  *  \return Void.
  */
 
