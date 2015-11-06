@@ -46,7 +46,8 @@ double haresNeighboursCells(const struct_matrix *gameLand, int i, int j);
  *  \return newValue.
  */
 
-double haresNewValue(struct_matrix *gameLand, int i, int j);
+double haresNewValue(struct_matrix *gameLand, int i, int j, \
+		configurations configs);
 
 /** \fn pumasNeighboursCells
  * \brief  brief description of what the fucntion does
@@ -60,8 +61,6 @@ double haresNewValue(struct_matrix *gameLand, int i, int j);
  */
 
 double pumasNeighboursCells(const struct_matrix *gameLand, int i, int j);
-
-
 /** \fn pumasNewValue
  * \brief  brief description of what the fucntion does
  * \fn pumasNewValue
@@ -75,7 +74,8 @@ double pumasNeighboursCells(const struct_matrix *gameLand, int i, int j);
  *  \return newValue.
  */
 
-double pumasNewValue(struct_matrix *gameLand, int i, int j);
+double pumasNewValue(struct_matrix *gameLand, int i, int j, \
+                            configurations configs);
 
 /** \fn mainLoop
  * \brief  brief description of what the fucntion does
@@ -89,6 +89,7 @@ double pumasNewValue(struct_matrix *gameLand, int i, int j);
  *  \return Void.
  */
 
-void mainLoop(struct_matrix *gameLand, struct_matrix *newGameLand,  double *totalHares, double *totalPumas);
+void mainLoop(struct_matrix *gameLand, struct_matrix *newGameLand,  double *totalHares, double *totalPumas, \
+                            configurations configs);
 
 #endif
