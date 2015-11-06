@@ -3,10 +3,10 @@
  *
  *   explain
  *
- *  \author B083194
+*  \author B083194
  *  \author B084292
- *  \author B
- *  \author B
+ *  \author B082906
+ *  \author B088321
  *  \date 06/11/12
  *  \bug No known bugs.
  */
@@ -15,29 +15,10 @@
 #define GLOBAL_VALUES_H
 
 #include <stdio.h>
-/*
-extern double dt;
-extern double r;
-extern double a;
-extern double b;
-extern double m;
-extern double k;
-extern double l;
-extern double T;
-extern double crit_hares_lower;
-extern double crit_hares_upper;
-extern double crit_pumas_lower;
-extern double crit_pumas_upper;
-*/
+/** 
+ * Declaring all parameters used throughout
+ */ 
 
-/**
-*setting the colour scales for the output ppm files
-*/
-/*
-extern double min_colour;
-extern double scale_pumas;
-extern double scale_hares;
-*/
 typedef struct configurations_struct {
   double dt;
   double r;
@@ -60,16 +41,6 @@ typedef struct configurations_struct {
 
 configurations parse_configs(FILE *fp);
 
-/** \fn print_configs
- * \brief  brief description of what the fucntion does
- *
- *
- * A more detailed description could go here
- *
- * \return Void. 
- *
- *
- */
 
 void print_configs(configurations config);
 
