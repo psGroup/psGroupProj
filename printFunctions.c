@@ -1,7 +1,6 @@
 /** \file printFunctions.c
- *  \brief Explain
+ *  \brief Functions that print all outsputs
  *
- *   explain
  *
  *  \author B083194
  *  \author B084292
