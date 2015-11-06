@@ -25,35 +25,9 @@
 
 #include "global_values.h"
 
-double dt = 0.4;/**< change in time*/
-double r = 0.08; /**< birthrate of hares */
-double a = 0.04; /**< the predation rate of pumas */
-double b = 0.02; /**< birth rate of hares per hare eaten */
-double m = 0.06; /**< the puma morality rate */
-double k = 0.2; /**< the diffusion rates for hares */
-double l = 0.2;/**< diffusion rate for pumas */
-double T = 5.0; /**< Time step */
-double crit_hares_lower = 0.1;/**< Lower critical limit for pumas */
-double crit_hares_upper = 5.0;/**< Upper critical limit for pumas */
-double crit_pumas_lower = 0.1;/**< Lower critical limit for pumas */
-double crit_pumas_upper = 5.0;/**< Upper critical limit for pumas */
-double land_number = 0.0;/**< Explain */
-int grid_number = 0;/**< Explain */
-
-/**
-*setting the colour scales for the output ppm files
-*/
-/*double min_colour = 70.0;
-double scale_pumas = 37.2;//(256.0 - min_colour)/crit_pumas_upper;
-double scale_hares = 37.2;//(256.0 - min_colour)/crit_hares_upper;*/
 
 /** \fn main
- * \brief  brief description of what the fucntion does
- *
- *
- * A more detailed description could go here
- *
- *
+ * \brief  This is the main function where we run the time for-loop.
  *
  *
  */
@@ -68,20 +42,20 @@ int main(int argc, char **argv) {
 	struct_matrix *newGameLand;
   struct_cell **swap;
 
-  int i, j;/**< Explain */
-  double t;/**< Explain */
-  double totalHares = 0.0;/**< Explain */
-  double avgHaresLand = 0.0;/**< Explain */
-  double totalPumas = 0.0;/**< Explain */
-  double avgPumasLand = 0.0;/**< Explain */
-  double avgHaresGrid = 0.0;/**< Explain */
-  double avgPumasGrid = 0.0;/**< Explain */
+  int i, j;
+  double t;
+  double totalHares = 0.0;/**< Total hares in grid to calculate average density */
+  double avgHaresLand = 0.0;
+  double totalPumas = 0.0;/**< Total pumas in grid to calculate average density */
+  double avgPumasLand = 0.0;
+  double avgHaresGrid = 0.0;
+  double avgPumasGrid = 0.0;
   configurations configs;
   
-  srand(time(NULL));
+  srand(time(NULL));/**< The random number generator we use to initialise the densities over the grid for hares and pumas */
 
  /**
-  *Explain why you do this
+  *Expecting 2 arguments in the command line, the second argument being the input file.
   */
   if (argc != 2)
   {
@@ -89,9 +63,7 @@ int main(int argc, char **argv) {
     return -1;
   }
 
-   /**
-  *input file name get
-  */
+
   inputFile = strdup(argv[1]);
   if (inputFile == NULL)
   {
@@ -132,7 +104,7 @@ int main(int argc, char **argv) {
   init_map(fp, gameLand, configs);
 
     /**
-  *free file ponter
+  *free file pointer
   */
   fclose(fp);
 
@@ -168,7 +140,7 @@ int main(int argc, char **argv) {
   newGameLand->map = dynamic_alloc_map(newGameLand->x, newGameLand->y);
 
 /**
-  *Explain this
+  *Initialising the grid. If grid is water the densities of hares and pumas is zero.
   */
 
   for (i = 0; i < newGameLand->x; i++)
@@ -192,7 +164,7 @@ int main(int argc, char **argv) {
   }
 
 /**
-*calculating the number of grid points that are land
+*calculating the number of grid points that are land.
 */
   for (i = 1; i < gameLand->x; i++) {
     for (j = 1; j < gameLand->y; j++) {
@@ -203,37 +175,46 @@ int main(int argc, char **argv) {
 }
 
 grid_number = (gameLand->x - 2)*(gameLand->y - 2);
-//  printMap(gameLand, "rawMap.txt");
-
-//  printMapToImg(gameLand, "theMap");
-//  printMap(gameLand, "theMap");
 
 	char *pumas_directory = "pumasPPM";
 	char *hares_directory = "haresPPM";
 	char *together_directory = "togetherPPM";
 	
 	for (t = 0.0;  t < 500.0; t += configs.dt) {
+		/**
+		 * Need to initialse total number of hares / pumas to 0 for each time iteration
+		 */
     totalHares = 0.0;
     totalPumas = 0.0;
 		mainLoop(gameLand, newGameLand, &totalHares, &totalPumas, configs);
-//	  printHares(gameLand);
-//	  printPumas(gameLand);
+		/**
+		 * Print outputs every T timesteps.
+		 */
     if(fmod(t, configs.T) < configs.dt){
  		   printPPM(gameLand, hares_directory, pumas_directory, together_directory, configs);
-//       printHares(gameLand);
-//       printPumas(gameLand);
+       printHares(gameLand);
+       printPumas(gameLand);
 
-       // Calculate the average densities and output the result
-       // average densities over land
+       /** 
+        * Calculate the average densities over land only
+        * 
+        */
        avgHaresLand = totalHares/((double)land_number);
        avgPumasLand = totalPumas/((double)land_number);
 
-       // average densities over entire grid
+       /** 
+        * Calculate the average densities over entire grid area
+        * 
+        */
        avgHaresGrid = totalHares/((double)grid_number);
        avgPumasGrid = totalPumas/((double)grid_number);
 
-//       printLandAvg(fpAvgLand, t, avgHaresLand, avgPumasLand);
-//       printGridAvg(fpAvgGrid, t, avgHaresGrid, avgPumasGrid);
+       /** 
+        * Output averages
+        * 
+        */
+      printLandAvg(fpAvgLand, t, avgHaresLand, avgPumasLand);
+      printGridAvg(fpAvgGrid, t, avgHaresGrid, avgPumasGrid);
 
     }
 
@@ -244,27 +225,14 @@ grid_number = (gameLand->x - 2)*(gameLand->y - 2);
     swap = gameLand->map;
     gameLand->map = newGameLand->map;
     newGameLand->map = swap;
-
-//    for (i = 0; i < gameLand->x; i++) {
-//      memcpy(gameLand->map[i], newGameLand->map[i], sizeof(struct_cell) * gameLand->y);
-//    }
-
-//	  print_pumas(gameLand);
-//	  printf("------------------------------------------------------------\n");
-//	  printPPM(gameLand);
-
-//this is the new one i'm adding - Brian
-// 		printPPM(gameLand, hares_directory, pumas_directory, together_directory);
-
-//	  printHares(gameLand);
-//	  printPumas(gameLand);
 	}
 
-  //free programme matrix
+  /**
+   * free programme matrix
+   * 
+   */
   free_map(gameLand);
   free_map(newGameLand);
-  //TODO chech that
-//  free(gameLand);
 
   fclose(fpAvgLand);
   fclose(fpAvgGrid);
