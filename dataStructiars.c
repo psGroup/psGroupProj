@@ -45,8 +45,21 @@ void free_map(struct_matrix *gameLand) {
 
 }
 
+int checkIfNumber(char *str) {
+    int length = strlen (str);
+    int i;
 
-void init_map(FILE *fp, struct_matrix *gameLand) {
+    for (i=0;i<length; i++) {
+        if (!isdigit(str[i]))
+        {
+            fprintf (stderr, "Entered input is not a number\n");
+            return -1;
+        }
+    }
+    return 0;
+}
+
+int init_map(FILE *fp, struct_matrix *gameLand) {
   char *line1 = NULL;
   char *line2 = NULL;
   char *token;
@@ -62,8 +75,10 @@ void init_map(FILE *fp, struct_matrix *gameLand) {
   if ((read = getline(&line1, &len, fp)) != -1)
   {
     token = strtok_r(line1, " ", &saveptr);
+   	if (checkIfNumber(token) == -1) return -1;
     gameLand->y = atoi(token) + 2;
     token = strtok_r(NULL, " ", &saveptr);
+   	if (checkIfNumber(token) == -1) return -1;
     gameLand->x = atoi(token) + 2;
   }
   free(line1);
@@ -129,4 +144,5 @@ void init_map(FILE *fp, struct_matrix *gameLand) {
   }
 
   free(line2);
+  return 0;
 }
