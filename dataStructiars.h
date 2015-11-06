@@ -5,9 +5,7 @@
 #include "global_values.h"
 
 /** \enum enum_area
-    \brief Enum.
-
-    An enum where land is set to have a value of 1 and water has a value of zero.
+ *   \brief  An enum where land is set to have a value of 1 and water has a value of zero.
 */
 
 enum enum_area{LAND, WATER};
@@ -34,13 +32,8 @@ typedef struct cell {
 /*! \var typedef struct matrix
     \typedef struct matrix .
 
-    Details.
-*/
-
-/*! \struct matrix
-    \A struct.
-
-    A more detailed class description.
+   Generating a matrix of where the elements are of the type of the struct we have defined
+   i.e contain information about land/water, hare and puma densities
 */
 
 typedef struct matrix {
@@ -52,38 +45,35 @@ typedef struct matrix {
 } struct_matrix;
 
 /** \fn dynamic_alloc_map
- * \brief  brief description of what the fucntion does
- * \fn dynamic_alloc_map
+ * 
+ * dynamically allocating memory to a map 
+ * where we will input values for land/water, 
+ * hare and puma densities
  *
- *
- *
- *
- *  \param x dimesnions of matrix
- *  \param y dimesnions of matrix
+ *  \param x dimesnions of matrix (number of rows)
+ *  \param y dimesnions of matrix (number of columns)
  *  \return map.
  */
 struct_cell **dynamic_alloc_map(int x, int y);
 
 /** * \fn free_map
- *\brief  brief description of what the fucntion does
+ *\brief  deallocates memory assigned previously
  *
- *
- *
- *
- *  \param gameland talk about what gameland does
+ *  \param gameland Gameland is our map of land with hare and puma information
  *  \return Void.
  */
 void free_map(struct_matrix *gameLand);
 
 /** \fn init_map
  * \brief  brief description of what the fucntion does
- * \fn init_map
+ ** \brief  Initialise map for from given matrix
  *
+ * When we pass in a binary file indicating land/water,
+ * this function turns it into a matrix of structs, each of 
+ * which contains an element for land/water, a random density of hares,
+ * and a random density of pumas. 
+ * We also add halo data: an extra edge of all water, so that our functions all work correctly. 
  *
- * This one is quite big so I think we should explain this one
- * A little bit more
- *
- *  \param gameland talk about what gameland does
  *  \return Void.
  */
 
