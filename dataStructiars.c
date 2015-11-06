@@ -1,6 +1,8 @@
 #include "dataStructiars.h"
 #include <string.h>
 #include <stdlib.h>
+#include <ctype.h>
+#include "global_values.h"
 
 struct_cell **dynamic_alloc_map(int x, int y) {
 
@@ -50,23 +52,26 @@ int checkIfNumber(char *str) {
     int i;
 
     for (i=0;i<length; i++) {
-        if (!isdigit(str[i]))
+    	  if (str[i] == '\n') {
+    	  	return 2;
+    	  	}
+        else if (!isdigit(str[i]))
         {
-            fprintf (stderr, "Entered input is not a number\n");
+            fprintf (stderr, "Entered input is not a number -->%c<--\n", str[i]);
             return -1;
         }
     }
     return 0;
 }
 
-int init_map(FILE *fp, struct_matrix *gameLand) {
+int init_map(FILE *fp, struct_matrix *gameLand, configurations configs) {
   char *line1 = NULL;
   char *line2 = NULL;
   char *token;
   char *saveptr = NULL;
   size_t len = 0;
   ssize_t read;
-  int nx, ny, i, j;
+  int i, j;
   /**
   * \brief talk awhat happens next
   */
@@ -82,7 +87,6 @@ int init_map(FILE *fp, struct_matrix *gameLand) {
     gameLand->x = atoi(token) + 2;
   }
   free(line1);
-
   gameLand->map = dynamic_alloc_map(gameLand->x, gameLand->y);
 
   printf("Rows:\t%d\n", gameLand->x);
@@ -128,8 +132,8 @@ int init_map(FILE *fp, struct_matrix *gameLand) {
 // We need to gaurantee that the initial densities are randomly distributed between 0.1 (our lower bound, below which the animal dies) and upper (at which they saturate).
 // (upper-lower)*rand ensures a random number between 0 and upper_limit.
 // we add the lower limit to make it a random number between the two limits
-            gameLand->map[i][j].pumas = ((crit_pumas_upper - crit_pumas_lower) * rand()/RAND_MAX )  + crit_pumas_lower;
-            gameLand->map[i][j].hares = ((crit_hares_upper - crit_hares_lower) * rand()/RAND_MAX )  + crit_hares_lower;
+            gameLand->map[i][j].pumas = ((configs.crit_pumas_upper - configs.crit_pumas_lower) * rand()/RAND_MAX )  + configs.crit_pumas_lower;
+            gameLand->map[i][j].hares = ((configs.crit_hares_upper - configs.crit_hares_lower) * rand()/RAND_MAX )  + configs.crit_hares_lower;
             j++;
         }
         else
