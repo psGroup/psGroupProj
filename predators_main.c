@@ -75,7 +75,8 @@ int main(int argc, char **argv) {
   double avgPumasLand = 0.0;
   double avgHaresGrid = 0.0;
   double avgPumasGrid = 0.0;
-
+  configurations configs;
+  
   srand(time(NULL));
 
   //Check if argv 2 exist
@@ -93,9 +94,19 @@ int main(int argc, char **argv) {
             NULL.\n");
     return -1;
   }
+  
+  fp = fopen("configFile", "r");
+  if (fp == NULL)
+  {
+    fprintf(stderr, "\\> function fopen fail to open the file: %s\n", "configFile");
+    return -1;
+  }
+  configs = parse_configs(fp);
+  free(fp);
+
 
   //open the input file
-  fp = fopen(inputFile, "r+");
+  fp = fopen(inputFile, "r");
   if (fp == NULL)
   {
     fprintf(stderr, "\\> function fopen fail to open the file: %s\n", \
@@ -109,7 +120,7 @@ int main(int argc, char **argv) {
   }
   
   //initialize map
-  init_map(fp, gameLand);
+  init_map(fp, gameLand, configs);
 
   //free file ponter
   fclose(fp);
@@ -181,14 +192,14 @@ grid_number = (gameLand->x - 2)*(gameLand->y - 2);
 	char *hares_directory = "haresPPM";
 	char *together_directory = "togetherPPM";
 	
-	for (t = 0.0;  t < 500.0; t += dt) {
+	for (t = 0.0;  t < 500.0; t += configs.dt) {
     totalHares = 0.0;
     totalPumas = 0.0;
-		mainLoop(gameLand, newGameLand, &totalHares, &totalPumas);
+		mainLoop(gameLand, newGameLand, &totalHares, &totalPumas, configs);
 //	  printHares(gameLand);
 //	  printPumas(gameLand);
-    if(fmod(t,20)<dt){
- 		   printPPM(gameLand, hares_directory, pumas_directory, together_directory);;
+    if(fmod(t, configs.T) < configs.dt){
+ 		   printPPM(gameLand, hares_directory, pumas_directory, together_directory, configs);
 //       printHares(gameLand);
 //       printPumas(gameLand);
 
