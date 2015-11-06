@@ -5,8 +5,8 @@
  *
  *  \author B083194
  *  \author B084292
- *  \author B
- *  \author B
+ *  \author B082906
+ *  \author B088321
  *  \date 06/11/12
  *  \bug No known bugs.
  */
@@ -18,26 +18,20 @@
 #include "printFunctions.h"
 
 /** \fn printPPM
- * \brief  brief description of what the fucntion does
- *
- *
- * A more detailed description could go here
- *
- *
+ * \brief  prints PPM files after grid is updated
  *
  *
  */
 
-void printPPM(struct_matrix *gameLand/**<[in] Explain */, char *hares_directory/**<[in] Explain */, 
-					char *pumas_directory/**<[in] Explain */, char *together_directory/**<[in] Explain */, configurations configs/**<[in] Explain */) {
+void printPPM(struct_matrix *gameLand, char *hares_directory, 
+					char *pumas_directory, char *together_directory, configurations configs) {
   
    static int fileID = 0;
   int i, j;
    
   double scale_pumas = (256.0 - configs.min_colour)/configs.crit_pumas_upper;
   double scale_hares = (256.0 - configs.min_colour)/configs.crit_hares_upper;
-  //printf("scale_hares %lf\n", scale_hares);
-
+ 
   FILE *fpHares, *fpPumas, *fpTogether;
   char haresFileName[30] = "haresPPM/hares"; //{ '\0' };
   char pumasFileName[30] = "pumasPPM/pumas";
@@ -63,11 +57,10 @@ void printPPM(struct_matrix *gameLand/**<[in] Explain */, char *hares_directory/
 		printf("Together directory is null \n");
 	}
 
-  fprintf(fpHares, "P3\n%d %d\n255\n", gameLand->y - 2, gameLand->x - 2); // width = 400, height = 400
+  fprintf(fpHares, "P3\n%d %d\n255\n", gameLand->y - 2, gameLand->x - 2); 
   fprintf(fpPumas, "P3\n%d %d\n255\n", gameLand->y - 2, gameLand->x - 2);
   fprintf(fpTogether, "P3\n%d %d\n255\n", gameLand->y - 2, gameLand->x - 2);
 
-/** explain the next bit */
 
   int pumas_ppm;
   int hares_ppm;
@@ -75,26 +68,24 @@ void printPPM(struct_matrix *gameLand/**<[in] Explain */, char *hares_directory/
   for (i = 1; i < (gameLand->x)-1; i++)
   {
     for (j = 1; j < (gameLand->y)-1; j++) {
-//      for (k = 0; k < 8; k++) {
         if (gameLand->map[i][j].area == LAND) {
-//          for (ki = 0; ki < 8; ki++) {
-            pumas_ppm = (int)(((gameLand->map[i][j].pumas * scale_pumas)) + configs.min_colour - 20); // this makes it more easily readable when we enter it in the print statment
+        	/**
+        	 * Scaling factor to output ppms
+        	 */
+            pumas_ppm = (int)(((gameLand->map[i][j].pumas * scale_pumas)) + configs.min_colour - 20);
             hares_ppm = (int)(((gameLand->map[i][j].hares * scale_hares)) + configs.min_colour - 20);
             //printf("hares_ppm %d", hares_ppm);
 
             fprintf(fpHares, "%d %d %d\t", pumas_ppm, 0, 0);
             fprintf(fpPumas, "%d %d %d\t", 0, hares_ppm, 0);
             fprintf(fpTogether, "%d %d %d\t", pumas_ppm, hares_ppm, 0);
-//          }
+
         }
         else {
-//          for (ki = 0; ki < 8; ki++) {
             fprintf(fpHares, "%d %d %d\t", 41, 73, 178);
             fprintf(fpPumas, "%d %d %d\t", 41, 73, 178);
             fprintf(fpTogether, "%d %d %d\t", 41, 73, 178);
-//          }
         }
-//      }
     }
     fprintf(fpHares, "\n");
     fprintf(fpPumas, "\n");
@@ -105,19 +96,9 @@ void printPPM(struct_matrix *gameLand/**<[in] Explain */, char *hares_directory/
   fclose(fpTogether);
 }
 
-/** \fn printMapToImage
- * \brief  brief description of what the fucntion does
- *
- *
- * A more detailed description could go here
- *
- *
- *
- *
- */
 
 
-void printMapToImg(struct_matrix *gameLand/**<[in] Explain */, char initFileName[30]/**<[in] Explain */) {
+void printMapToImg(struct_matrix *gameLand, char initFileName[30]) {
   static int fileID = 0;
   int i, j;
   FILE *fp;
@@ -151,13 +132,7 @@ void printMapToImg(struct_matrix *gameLand/**<[in] Explain */, char initFileName
 }
 
 /** \fn printMap
- * \brief  brief description of what the fucntion does
- *
- *
- * A more detailed description could go here
- *
- *
- *
+ * \brief Print the entire map
  *
  */
 
@@ -189,17 +164,11 @@ void printMap(const struct_matrix *gameLand, char initFileName[30]) {
 }
 
 /** \fn printHares
- * \brief  brief description of what the fucntion does
- *
- *
- * A more detailed description could go here
- *
- *
- * \param gameLand
+ * \brief  Print hares density
  *
  */
 
-void printHares(struct_matrix *gameLand) { //}, char initFileName[30]) { //246, 15, 15
+void printHares(struct_matrix *gameLand) {
   static int fileID = 0;
   int i, j;
   FILE *fp;
@@ -218,7 +187,6 @@ void printHares(struct_matrix *gameLand) { //}, char initFileName[30]) { //246, 
   {
     for (j = 0; j < gameLand->y; j++) {
       fprintf(fp, "%.2f ", gameLand->map[i][j].hares);
-//      fprintf(fp, "%c %c %c", gameLand.map[i][j].hares * 10, 10, 10);
     }
     fprintf(fp, "\n");
   }
@@ -227,17 +195,11 @@ void printHares(struct_matrix *gameLand) { //}, char initFileName[30]) { //246, 
 }
 
 /** \fn printPumas
- * \brief  brief description of what the fucntion does
- *
- *
- * A more detailed description could go here
- *
- *
- *
+ * \brief  Print pumas density
  *
  */
 
-void printPumas(struct_matrix *gameLand) { //}, char initFileName[30]) { //246, 15, 15
+void printPumas(struct_matrix *gameLand) {
   static int fileID = 0;
   int i, j;
   FILE *fp;
@@ -257,7 +219,6 @@ void printPumas(struct_matrix *gameLand) { //}, char initFileName[30]) { //246, 
   {
     for (j = 0; j < gameLand->y; j++) {
       fprintf(fp, "%.2f ", gameLand->map[i][j].pumas);
-//      fprintf(fp, "%c %c %c", gameLand.map[i][j].hares * 10, 10, 10);
     }
     fprintf(fp, "\n");
   }
@@ -266,12 +227,7 @@ void printPumas(struct_matrix *gameLand) { //}, char initFileName[30]) { //246, 
 }
 
 /** \fn printLandAvg
- * \brief  brief description of what the fucntion does
- *
- *
- * A more detailed description could go here
- *
- *
+ * \brief  Print the average densities of hares and pumas over land grid points
  *
  *
  */
@@ -282,13 +238,7 @@ void printLandAvg(FILE *fp, double t, double avgHaresLand, double avgPumasLand) 
 }
 
 /** \fn printGridAvg
- * \brief  brief description of what the fucntion does
- *
- *
- * A more detailed description could go here
- *
- *
- *
+ * \brief  Print the average densities of hares and pumas over the entire grid
  *
  */
 
