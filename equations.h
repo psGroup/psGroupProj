@@ -1,8 +1,8 @@
 /** \file equations.h
- *  \brief Explain
+ *  \brief Header file to set up functions for partial differential equations
  *
  *
-*  \author B083194
+ *  \author B083194
  *  \author B084292
  *  \author B082906
  *  \author B088321
