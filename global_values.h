@@ -1,3 +1,16 @@
+/** \file global_values.h
+ *  \brief Explain
+ *
+ *   explain
+ *
+ *  \author B083194
+ *  \author B084292
+ *  \author B
+ *  \author B
+ *  \date 06/11/12
+ *  \bug No known bugs.
+ */
+
 #ifndef GLOBAL_VALUES_H
 #define GLOBAL_VALUES_H
 
