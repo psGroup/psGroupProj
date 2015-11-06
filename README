@@ -1,0 +1,13 @@
+A make file is provided to easily run the program.
+To run the program run “make” in the command line, and then run “./out”.
+
+The program simulates the population dynamics of hares and pumas on islands surrounded by water. An “islands.dat” file is provided and this is the input data.
+The program produces: ppm files for both pumas and hares (in directories pumasPPM, haresPPM), numerical values in array format for the densities of pumas and hares (in directories pumasDensity, haresDensity) and average values of densities for both pumas and hares taken 1. Over only land grid points and 2. The entire grid area (land and water) (in .txt files averageLand.txt and averageGrid.txt).
+
+The program is modularised into files that execute specific functions: print, equations, parameters, main. This improves the readability and design of the code, while making it easier to debug.
+
+The debugging tools used were: CUNIT, gdb, general print statements.
+
+The documentation tool used was doxygen. This provided a need framework to comment our code as we wrote the code, then linking to proper documentation online.
+
+The repository used was GitHub.
