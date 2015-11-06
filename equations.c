@@ -20,7 +20,7 @@
  *
  */
 
-double landNeighboursCells(const struct_matrix *gameLand/**< [in] docs for input parameter v. */, int i/**< [in] docs for input parameter v. */, int j/**< [in] docs for input parameter v. */) {
+double landNeighboursCells(const struct_matrix *gameLand, int i, int j) {
   double n = 0.0;
   
   /**
@@ -104,11 +104,11 @@ double pumasNeighboursCells(const struct_matrix *gameLand, int i, int j) {
  */
 
 double pumasNewValue(struct_matrix *gameLand, int i, int j, configurations configs) {
-  double oldValue = gameLand->map[i][j].pumas; /**< Explain */
-  double newValue = 0.0;/**< Explain */
-  double neibarsPumasValues = pumasNeighboursCells(gameLand, i, j);/**< Explain */
-  double neibarsLandCells = landNeighboursCells(gameLand, i, j);/**< Explain */
-  double randomWalk = 0.0;/**< Explain */
+  double oldValue = gameLand->map[i][j].pumas; 
+  double newValue = 0.0;
+  double neibarsPumasValues = pumasNeighboursCells(gameLand, i, j);
+  double neibarsLandCells = landNeighboursCells(gameLand, i, j);
+  double randomWalk = 0.0;
 
   randomWalk = configs.l * (neibarsPumasValues - (neibarsLandCells * oldValue));
 
