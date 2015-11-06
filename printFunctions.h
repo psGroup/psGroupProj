@@ -17,7 +17,7 @@
 int increace(float one, float two);
 
 void printPPM(struct_matrix *gameLand, char *hares_directory,
-					 char *pumas_directory, char *together_directory);
+					 char *pumas_directory, char *together_directory, configurations configs);
 
 /** \fn printMapToImg
  * \brief  brief description of what the fucntion does
