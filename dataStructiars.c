@@ -152,7 +152,7 @@ int init_map(FILE *fp, struct_matrix *gameLand, configurations configs) {
       if (j < gameLand->y) {
         if (atoi(token) == 1)
         {
-       	if (checkIfNumber(token) == -1) return -2;
+       	if (checkIfNumber(token, len) == -1) return -2;
             gameLand->map[i][j].area = LAND;
 /**
  * We need to gaurantee that the initial densities are randomly distributed between 0.1 (our lower bound, below which the animal dies) and upper (at which they saturate).
