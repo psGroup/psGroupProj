@@ -1,5 +1,5 @@
-# Compiles the main file, displays ppms
-all : directories target run
+CC = gcc 
+all: directories target
 
 directories:
 	mkdir -p haresDensity
@@ -8,18 +8,24 @@ directories:
 	mkdir -p pumasDensity
 	mkdir -p togetherPPM
 
-target: *.c
-	gcc -o target *.c -I.
+LIBS = -lm
+OBJH= printFunctions.h dataStructiars.h equations.h global_values.h
+OBJC= printFunctions.c dataStructiars.c equations.c predators_main.c
+OBJO= printFunctions.o dataStructiars.o equations.o predators_main.o
 
-#.PHONY : run
-#run: target
-#	./target Test.dat
+$(OBJO): $(OBJC) $(OBJH)  
+	$(CC) $(LIBS) $(OBJC)
 
-# type "make clean" into the command line to clear the directories
+target : $(OBJO)
+	./a.out test.dat
+
+
 .PHONY : clean
-clean :
-		rm -r haresDensity
-		rm -r haresPPM
-		rm -r pumasDensity
-		rm -r pumasPPM
-		rm -r togetherPPM
+clean:
+	rm main.o dataStructiars.o equations.o printFunctions.o
+	rm -f
+	rm -r haresDensity
+	rm -r haresPPM
+	rm -r pumasDensity
+	rm -r pumasPPM
+	rm -r togetherPPM
