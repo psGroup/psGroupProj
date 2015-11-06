@@ -1,7 +1,34 @@
+/** \file equations.c
+ *  \brief Explain
+ *
+ *
+ *  \author B083194
+ *  \author B084292
+ *  \author B
+ *  \author B
+ *  \date 06/11/12
+ *  \bug No known bugs.
+ */
+ 
 #include "equations.h"
 
-double landNeighboursCells(const struct_matrix *gameLand, int i, int j) {
+/** \fn landNeighboursCells
+ * \brief  brief description of what the fucntion does
+ *
+ *
+ * A more detailed description could go here
+ *
+ *
+ * \return n
+ *
+ */
+
+double landNeighboursCells(const struct_matrix *gameLand/**< [in] docs for input parameter v. */, int i/**< [in] docs for input parameter v. */, int j/**< [in] docs for input parameter v. */) {
   double n = 0.0;
+  
+  /**
+  *explain for loop
+  */
 
   if (gameLand->map[i-1][j].area == LAND)
 		n+= 1.0;
@@ -18,12 +45,34 @@ double landNeighboursCells(const struct_matrix *gameLand, int i, int j) {
 	return n;
 }
 
+/** \fn haresNeighboursCells
+ * \brief  brief description of what the fucntion does
+ *
+ *
+ * A more detailed description could go here
+ *
+ *
+ * \return Void
+ *
+ */
+
 double haresNeighboursCells(const struct_matrix *gameLand, int i, int j) {
   return (gameLand->map[i-1][j].hares + \
           gameLand->map[i+1][j].hares + \
           gameLand->map[i][j-1].hares + \
           gameLand->map[i][j+1].hares);
 }
+
+/** \fn haresNewValue
+ * \brief  brief description of what the fucntion does
+ *
+ *
+ * A more detailed description could go here
+ *
+ *
+ * \return newValue.
+ *
+ */
 
 double haresNewValue(struct_matrix *gameLand, int i, int j, configurations configs) {
   double oldValue = gameLand->map[i][j].hares;
@@ -32,7 +81,7 @@ double haresNewValue(struct_matrix *gameLand, int i, int j, configurations confi
   double neibarsLandCells = landNeighboursCells(gameLand, i, j);
   double randomWalk = 0.0;
 
-  //randomWalk
+  /** explain random walk */
   randomWalk = configs.k * (neibarsHaresValues - (neibarsLandCells * oldValue));
 
   newValue = ((configs.r*oldValue) - configs.a * oldValue * gameLand->map[i][j].pumas);
@@ -43,6 +92,17 @@ double haresNewValue(struct_matrix *gameLand, int i, int j, configurations confi
   return newValue;
 }
 
+/** \fn pumasNeighboursCells
+ * \brief  brief description of what the fucntion does
+ *
+ *
+ * A more detailed description could go here
+ *
+ *
+ * \return Void
+ *
+ */
+
 double pumasNeighboursCells(const struct_matrix *gameLand, int i, int j) {
   return (gameLand->map[i-1][j].pumas + \
           gameLand->map[i+1][j].pumas + \
@@ -50,12 +110,23 @@ double pumasNeighboursCells(const struct_matrix *gameLand, int i, int j) {
           gameLand->map[i][j+1].pumas);
 }
 
+/** \fn pumasNewValue
+ * \brief  brief description of what the fucntion does
+ *
+ *
+ * A more detailed description could go here
+ *
+ *
+ * \return newValue.
+ *
+ */
+
 double pumasNewValue(struct_matrix *gameLand, int i, int j, configurations configs) {
-  double oldValue = gameLand->map[i][j].pumas;
-  double newValue = 0.0;
-  double neibarsPumasValues = pumasNeighboursCells(gameLand, i, j);
-  double neibarsLandCells = landNeighboursCells(gameLand, i, j);
-  double randomWalk = 0.0;
+  double oldValue = gameLand->map[i][j].pumas; /**< Explain */
+  double newValue = 0.0;/**< Explain */
+  double neibarsPumasValues = pumasNeighboursCells(gameLand, i, j);/**< Explain */
+  double neibarsLandCells = landNeighboursCells(gameLand, i, j);/**< Explain */
+  double randomWalk = 0.0;/**< Explain */
 
   //randomWalk
   randomWalk = configs.l * (neibarsPumasValues - (neibarsLandCells * oldValue));
@@ -68,6 +139,17 @@ double pumasNewValue(struct_matrix *gameLand, int i, int j, configurations confi
   return newValue;
 }
 
+/** \fn mainLoop
+ * \brief  brief description of what the fucntion does
+ *
+ *
+ * A more detailed description could go here
+ *
+ *
+ * \return Void.
+ *
+ */
+
 void mainLoop(struct_matrix *gameLand, struct_matrix *newGameLand, double *totalHares, double *totalPumas, configurations configs) {
 
 	int i, j;
@@ -79,6 +161,10 @@ void mainLoop(struct_matrix *gameLand, struct_matrix *newGameLand, double *total
 					newGameLand->map[i][j].hares = haresNewValue(gameLand, i ,j, configs);
 					newGameLand->map[i][j].pumas = pumasNewValue(gameLand, i ,j, configs);
 
+
+/**
+	* Explain next bit
+	*/
           // calculate average over grid
           (*totalHares) += newGameLand->map[i][j].hares;
           (*totalPumas) += newGameLand->map[i][j].pumas;
