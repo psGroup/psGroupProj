@@ -104,6 +104,10 @@ int main(int argc, char **argv) {
   }
 
   gameLand = (struct_matrix*) malloc(sizeof(struct_matrix));
+  if(gameLand == NULL) {
+  	fprintf(stderr, "\\> Malloc failed for gameLand \n");
+  }
+  
   //initialize map
   init_map(fp, gameLand);
 
@@ -130,6 +134,10 @@ int main(int argc, char **argv) {
   fprintf(fpAvgGrid, "    Time    Average Hare Density    Average Puma Density\n");
 
   newGameLand = (struct_matrix*) malloc(sizeof(struct_matrix));
+  if(newGameLand == NULL) {
+  	fprintf(stderr, "\\>Malloc failed for newGameLand\n");
+  }
+  
   newGameLand->x = gameLand->x;
   newGameLand->y = gameLand->y;
   newGameLand->map = dynamic_alloc_map(newGameLand->x, newGameLand->y);

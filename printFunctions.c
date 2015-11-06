@@ -4,40 +4,6 @@
 #include <math.h>
 #include "printFunctions.h"
 
-int increace(float one, float two) {
-  int diff = two - one;
-  float incr = (diff / ((two + one)/2)) * 100;
-
-  return (int) incr;
-
-}
-/*
-void printPPM(struct_matrix *gameLand) {
-  static int fileID = 0;
-  int i, j, k, ki;
-  double crit_hares_upper = 5.0;//< Upper critical limit for pumas 
-  double crit_pumas_upper = 5.0;//< Upper critical limit for pumas 
-  double min_colour = 70.0;
-  double scale_pumas = (256.0 - min_colour)/crit_pumas_upper;
-  double scale_hares = (256.0 - min_colour)/crit_hares_upper;
-  //printf("scale_hares %lf\n", scale_hares);
-
-  FILE *fpHares, *fpPumas, *fpTogether;
-  char haresFileName[30] = "haresPPM/hares"; //{ '\0' };
-  char pumasFileName[30] = "pumasPPM/pumas";
-  char togetherFileName[30] = "togetherPPM/together";
-  fileID++;
-
-  sprintf(haresFileName, "%s%d.ppm", haresFileName, fileID);
-  fpHares=fopen(haresFileName, "w");
-
-  sprintf(pumasFileName, "%s%d.ppm", pumasFileName, fileID);
-  fpPumas=fopen(pumasFileName, "w");
-
-  sprintf(togetherFileName, "%s%d.ppm", togetherFileName, fileID);
-  fpTogether=fopen(togetherFileName, "w");
-*/
-
 void printPPM(struct_matrix *gameLand, char *hares_directory, 
 					char *pumas_directory, char *together_directory) {
   
@@ -69,19 +35,12 @@ void printPPM(struct_matrix *gameLand, char *hares_directory,
 		printf("Pumas directory is null \n");
 	}
 
-sprintf(togetherFileName, "%s/%s%d.ppm", together_directory, "hares", fileID);
+  sprintf(togetherFileName, "%s/%s%d.ppm", together_directory, "hares", fileID);
   fpTogether=fopen(togetherFileName, "w");	
-  
-	if(fpTogether==NULL){
+ 	if(fpTogether==NULL){
 		printf("Together directory is null \n");
 	}
 
-/*  sprintf(togetherFileName, "%s%d.ppm", togetherFileName, fileID);
-  fpTogether=fopen(togetherFileName, "w");
-	if(fpTogether ==NULL){
-		printf("Joined directory is null \n");
-	}
-*/
   fprintf(fpHares, "P3\n%d %d\n255\n", gameLand->y - 2, gameLand->x - 2); // width = 400, height = 400
   fprintf(fpPumas, "P3\n%d %d\n255\n", gameLand->y - 2, gameLand->x - 2);
   fprintf(fpTogether, "P3\n%d %d\n255\n", gameLand->y - 2, gameLand->x - 2);
@@ -136,7 +95,10 @@ void printMapToImg(struct_matrix *gameLand, char initFileName[30]) {
   sprintf(fileName, "%s%d.ppm", fileName, fileID);
 
   fp=fopen(fileName, "w");
-
+	if(fp == NULL) {
+		fprintf(stderr, "\\> fopen failed within printMapToImg function\n");
+		exit(EXIT_FAILURE);
+	}
   fprintf(fp, "P3\n%d %d\n255\n", gameLand->y - 2, gameLand->x - 2);
 
   for (i = 1; i < (gameLand->x - 1); i++) {
@@ -176,6 +138,10 @@ void printMap(const struct_matrix *gameLand, char initFileName[30]) {
   sprintf(fileName, "%s%d", fileName, fileID);
 
   fp=fopen(fileName, "w");
+	if(fp == NULL) {
+		fprintf(stderr, "\\> fopen failed within printMap function\n");
+		exit(EXIT_FAILURE);
+	}
 
    for (i = 1; i < (gameLand->x - 1); i++) {
     for (j = 1; j < (gameLand->y - 1); j++)
@@ -209,7 +175,10 @@ void printHares(struct_matrix *gameLand) { //}, char initFileName[30]) { //246, 
   sprintf(fileName, "%s%d", fileName, fileID);
 
   fp=fopen(fileName, "w");
-
+	if(fp == NULL) {
+			fprintf(stderr, "\\> fopen failed within printHares function\n");
+			exit(EXIT_FAILURE);
+		}
   for (i = 0; i < gameLand->x; i++)
   {
     for (j = 0; j < gameLand->y; j++) {
@@ -244,6 +213,10 @@ void printPumas(struct_matrix *gameLand) { //}, char initFileName[30]) { //246, 
   sprintf(fileName, "%s%d", fileName, fileID);
 
   fp=fopen(fileName, "w");
+	if(fp == NULL) {
+		fprintf(stderr, "\\> fopen failed within printPumas function\n");
+		exit(EXIT_FAILURE);
+	}
 
   for (i = 0; i < gameLand->x; i++)
   {

@@ -38,9 +38,17 @@ struct_matrix *build_matrix(){
 	int i,j,a,b;
 
 	test_matrix = (struct_matrix*) malloc(sizeof(struct_matrix));
-	
+	if(test_matrix == NULL) {
+		fprintf("Malloc failed for test_matrix");
+		exit(EXIT_FAILURE);
+	}	
 	// allocate memory for our test matrix
 	test_matrix->map = (struct_cell**) malloc(sizeof(struct_cell*) * x);
+	if(test_matrix->map[0] == NULL) {
+			fprintf("Malloc failed for test_matrix.map");
+		   exit(EXIT_FAILURE);
+		}	
+	
 	  for (i = 0; i < x; i++)
 	  {
 		 test_matrix->map[i] = (struct_cell*) malloc(sizeof(struct_cell) * y);
@@ -79,11 +87,9 @@ TEST test_the_neighbour_calculation(){
 TEST test_hares_update(void){
 	struct_matrix *test_matrix = build_matrix();
 	//test a point in the middle of the grid
-	double mid = haresNewValue(test_matrix,1,1);
+	double mid = haresNewValue(test_matrix,2,2);
 	double mid_known = 2.95;
-			//ASSERT_EQ(mid, mid_known); //don't see why this doesn't work - floating point errors?
-			//PASS();
-	ASSERT_IN_RANGE(0,abs(mid-mid_known),0.000000001); 
+	ASSERT_IN_RANGE(0,abs(mid-mid_known),0.00001); 
 	// test to within a tolerance (last argument) because the values are not \
 	 exactly the same due to floating point errors
 	PASS();
@@ -95,7 +101,7 @@ TEST test_pumas_update(void){
 	//test a mid point
 	double mid = pumasNewValue(test_matrix,1,1);
 	double mid_known = 2.95;
-	ASSERT_IN_RANGE(0,abs(mid-mid_known),0.000000001);
+	ASSERT_IN_RANGE(0,abs(mid-mid_known),0.00001);
 	PASS();
 }
 
@@ -104,14 +110,14 @@ TEST test_pumas_update(void){
 TEST test_main_loop(void){
 	struct_matrix *test_matrix = build_matrix();
 	struct_matrix *new_matrix = build_matrix();
-	  double totalHares = 0.0;
-	  double totalPumas = 0.0;
+	double totalHares = 0.0; //arguments of the mainLoop function, not used here
+	double totalPumas = 0.0;
 
 	mainLoop(test_matrix, new_matrix,&totalHares,&totalPumas);
 	double corner_updated = new_matrix->map[0][0].hares;
 	double mid_updated = new_matrix->map[2][2].hares;
-	double corner_known = 2.95; //input correct value for initial matrix
-	double mid_known = 2.95; //input correct value for initial matrix
+	double corner_known = 2.95; //we establish these values numerically
+	double mid_known = 2.95; 
 
 	// test a corner
 	ASSERT_IN_RANGE(0,abs(corner_updated - corner_known), 0.00000001);
@@ -129,8 +135,8 @@ TEST test_init_map(void){
 	int a;
 	double num_land =0;
 	char *output = "test_file.dat";
-	FILE *fp = fopen(output, "r+");
 	int returnValue = 0;
+	FILE *fp = fopen(output, "r+");
 	if (fp == NULL)
    {
     fprintf(stderr, "\\> function fopen failed to create and open an output \
@@ -146,7 +152,6 @@ TEST test_init_map(void){
 	
 	//test halo data -- count the number of land grid spaces in the first row
 	// we expect to have none, so assert that our num_land==0
-	// Do we want to do this for all edge rows or is this sufficient?
 		for(a =0; a< test_matrix->x; a++){
 			if(test_matrix->map[a][0].area == LAND)
 			{
@@ -162,19 +167,13 @@ TEST test_init_map(void){
 }
 
 
-/*
-	//test free_map function -- not sure how to test that memory has been freed
-	free_map(test_matrix);
-	ASSERT(test_matrix->map[a][0].area == NULL);
-*/
-
 TEST test_hares_neighbours(void){
-	/* We must test that haresNeighboursCells calculates the right number of 
+/* We must test that haresNeighboursCells calculates the right number of 
 	hares surrounding the target cell because this contributes to the overall 
 	update of the density of hares at that point
 	Since we've set all cells to have 3 hares, we expect any cells neighbours to 
 	have 16 hares. 
-	*/	
+*/	
 	struct_matrix *test_matrix = build_matrix();
 	double neighbours_sum = haresNeighboursCells(test_matrix, 2,2);
 	double expected_neighbours = 12.0;
@@ -185,12 +184,12 @@ TEST test_hares_neighbours(void){
 
 
 TEST test_pumas_neighbours(void){
-	/* We must test that pumasNeighboursCells calculates the right number of 
+/* We must test that pumasNeighboursCells calculates the right number of 
 	hares surrounding the target cell because this contributes to the overall 
 	update of the density of hares at that point
 	Since we've set all cells to have 3 pumas, we expect any cells neighbours to 
 	have 12 hares. 
-	*/	
+*/	
 	struct_matrix *test_matrix = build_matrix();
 	double neighbours_sum = pumasNeighboursCells(test_matrix, 2,2);
 	double expected_neighbours = 12.0;
@@ -199,9 +198,11 @@ TEST test_pumas_neighbours(void){
 } 
 
 
-
+/* We must test that the print function works correctly with a given input 
+	We pass a test matrix, and expect that the function generates a ppm 
+	file within a given directory. 
+*/
 TEST test_ppm_print(){
-//	FILE *fpHares, *fpPumas, 
 	char *hares = "test_hares_directory";
 	char *pumas = "test_pumas_directory";
 	char *together = "test_together_directory";
@@ -231,18 +232,17 @@ TEST test_ppm_print(){
 	}
 
 SUITE(suite){
-//RUN_TEST(test_the_neighbour_calculation);
-//RUN_TEST(test_hares_neighbours);
-//RUN_TEST(test_pumas_neighbours);
-//RUN_TEST(test_hares_update);
-//RUN_TEST(test_pumas_update);
-//RUN_TEST(test_main_loop);
+RUN_TEST(test_the_neighbour_calculation);
+RUN_TEST(test_hares_neighbours);
+RUN_TEST(test_pumas_neighbours);
+RUN_TEST(test_hares_update);
+RUN_TEST(test_pumas_update);
+RUN_TEST(test_main_loop);
 RUN_TEST(test_init_map);
-//RUN_TEST(test_ppm_print);
-
+RUN_TEST(test_ppm_print);
 }
 
-GREATEST_MAIN_DEFS();
+GREATEST_MAIN_DEFS(); //Setup for unit test framework
 
 int main(int argc, char **argv) {
     GREATEST_MAIN_BEGIN();      /* command-line arguments, initialization. */

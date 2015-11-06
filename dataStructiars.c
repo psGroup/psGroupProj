@@ -10,7 +10,7 @@ struct_cell **dynamic_alloc_map(int x, int y) {
   map = (struct_cell**) malloc(sizeof(struct_cell*) * x);
   if (map == NULL)
   {
-    fprintf(stderr, "malloc faild\n");
+    fprintf(stderr, "malloc failed\n");
     exit(EXIT_FAILURE);
   }
 
@@ -23,7 +23,7 @@ struct_cell **dynamic_alloc_map(int x, int y) {
     map[i] = (struct_cell*) malloc(sizeof(struct_cell) * y);
     if (map[i] == NULL)
     {
-      fprintf(stderr, "malloc faild\n");
+      fprintf(stderr, "malloc failed\n");
       exit(EXIT_FAILURE);
     }
   }
@@ -123,6 +123,7 @@ int init_map(FILE *fp, struct_matrix *gameLand) {
       if (j < gameLand->y) {
         if (atoi(token) == 1)
         {
+       	if (checkIfNumber(token) == -1) return -2;
             gameLand->map[i][j].area = LAND;
 // We need to gaurantee that the initial densities are randomly distributed between 0.1 (our lower bound, below which the animal dies) and upper (at which they saturate).
 // (upper-lower)*rand ensures a random number between 0 and upper_limit.
