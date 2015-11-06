@@ -1,3 +1,14 @@
+/** \file dataStructiars.c
+ *  \brief Sets up data arrays
+ *
+ *  \author B083194
+ *  \author B084292
+ *  \author B082906
+ *  \author B088321
+ *  \date 06/11/12
+ *  \bug No known bugs.
+ */
+
 #ifndef DATA_STRUCTIARS_H
 #define DATA_STRUCTIARS_H
 
