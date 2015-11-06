@@ -40,7 +40,7 @@ struct_cell **dynamic_alloc_map(int x/**<[in] number of rows allocated memory  *
     map[i] = (struct_cell*) malloc(sizeof(struct_cell) * y);
     if (map[i] == NULL)
     {
-      fprintf(stderr, "malloc failed\n");/**<[in] We must test that the memory allocation has worked correctly  */
+      fprintf(stderr, "malloc failed\n");/**< We must test that the memory allocation has worked correctly  */
       exit(EXIT_FAILURE);
     }
   }
@@ -93,7 +93,7 @@ int checkIfNumber(char *str) {
  *
  */
 
-int init_map(FILE *fp, struct_matrix *gameLand/**<[in] explain  */, configurations configs/**<[in] explain  */) {
+int init_map(FILE *fp, struct_matrix *gameLand, configurations configs) {
   char *line1 = NULL;
   char *line2 = NULL;
   char *token;
@@ -101,9 +101,7 @@ int init_map(FILE *fp, struct_matrix *gameLand/**<[in] explain  */, configuratio
   size_t len = 0;
   ssize_t read;
   int i, j;
-  /**
-  * \brief talk awhat happens next
-  */
+ 
 
   if ((read = getline(&line1, &len, fp)) != -1)
   {
