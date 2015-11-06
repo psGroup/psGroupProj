@@ -1,3 +1,15 @@
+/** \file global_values.c
+ *  \brief Setting up all parameters used in equations and print statements
+ *
+ *
+ *  \author B083194
+ *  \author B084292
+ *  \author B082906
+ *  \author B088321
+ *  \date 06/11/12
+ *  \bug No known bugs.
+ */
+
 #include "global_values.h"
 #include <string.h>
 #include <stdlib.h>
@@ -8,7 +20,6 @@ configurations parse_configs(FILE *fp) {
   char *saveptr = NULL;
   size_t len = 0;
   ssize_t read;
-//  double tempNum = 0.0;
   
   while((read = getline(&line, &len, fp)) != -1)
   {
