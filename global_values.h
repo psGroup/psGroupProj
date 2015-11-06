@@ -1,9 +1,8 @@
 /** \file global_values.h
- *  \brief Explain
+ *  \brief Setting up all parameters used in equations and print statements
  *
- *   explain
  *
-*  \author B083194
+ *  \author B083194
  *  \author B084292
  *  \author B082906
  *  \author B088321
