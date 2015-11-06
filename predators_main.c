@@ -1,14 +1,15 @@
-/** \file doxygen.c
+/** \file predators_main.c
  *  \brief Puma and hare density
  *
  *  This contains code for determining the number of hares and
  *  Pumas in a grid. There will be water present on the grid, and
  *  in water squares, no important animals live.
  *
- *  \author Karl Delargy (kdelargy)
- *  \author Brian Flynn (bflynn)
- *  \author Killian Tattan (ktattan)
- *  \author Angelos Stylianides (astyliandes)
+ *  \author B083194
+ *  \author B084292
+ *  \author B
+ *  \author B
+ *  \date 06/11/12
  *  \bug No known bugs.
  */
 
@@ -36,8 +37,8 @@ double crit_hares_lower = 0.1;/**< Lower critical limit for pumas */
 double crit_hares_upper = 5.0;/**< Upper critical limit for pumas */
 double crit_pumas_lower = 0.1;/**< Lower critical limit for pumas */
 double crit_pumas_upper = 5.0;/**< Upper critical limit for pumas */
-double land_number = 0.0;
-int grid_number = 0;
+double land_number = 0.0;/**< Explain */
+int grid_number = 0;/**< Explain */
 
 /**
 *setting the colour scales for the output ppm files
@@ -46,7 +47,7 @@ int grid_number = 0;
 double scale_pumas = 37.2;//(256.0 - min_colour)/crit_pumas_upper;
 double scale_hares = 37.2;//(256.0 - min_colour)/crit_hares_upper;*/
 
-/** \fn Main
+/** \fn main
  * \brief  brief description of what the fucntion does
  *
  *
@@ -67,26 +68,30 @@ int main(int argc, char **argv) {
 	struct_matrix *newGameLand;
   struct_cell **swap;
 
-  int i, j;
-  double t;
-  double totalHares = 0.0;
-  double avgHaresLand = 0.0;
-  double totalPumas = 0.0;
-  double avgPumasLand = 0.0;
-  double avgHaresGrid = 0.0;
-  double avgPumasGrid = 0.0;
+  int i, j;/**< Explain */
+  double t;/**< Explain */
+  double totalHares = 0.0;/**< Explain */
+  double avgHaresLand = 0.0;/**< Explain */
+  double totalPumas = 0.0;/**< Explain */
+  double avgPumasLand = 0.0;/**< Explain */
+  double avgHaresGrid = 0.0;/**< Explain */
+  double avgPumasGrid = 0.0;/**< Explain */
   configurations configs;
   
   srand(time(NULL));
 
-  //Check if argv 2 exist
+ /**
+  *Explain why you do this
+  */
   if (argc != 2)
   {
     fprintf(stderr, "No input file\n");
     return -1;
   }
 
-  //get input file name
+   /**
+  *input file name get
+  */
   inputFile = strdup(argv[1]);
   if (inputFile == NULL)
   {
@@ -105,7 +110,9 @@ int main(int argc, char **argv) {
   free(fp);
 
 
-  //open the input file
+  /**
+  *open the input file
+  */
   fp = fopen(inputFile, "r");
   if (fp == NULL)
   {
@@ -119,13 +126,19 @@ int main(int argc, char **argv) {
   	fprintf(stderr, "\\> Malloc failed for gameLand \n");
   }
   
-  //initialize map
+  /**
+  *initialize map
+  */
   init_map(fp, gameLand, configs);
 
-  //free file ponter
+    /**
+  *free file ponter
+  */
   fclose(fp);
 
-  //free file name store array
+  /**
+  *free file name store array
+  */
   free(inputFile);
 
   fpAvgLand=fopen("averageLand.txt", "w");
@@ -139,8 +152,9 @@ int main(int argc, char **argv) {
     fprintf(stderr, "file append fail\n");
     return -1;
   }
-
-  //Print Header
+/**
+  *Print Header
+  */
   fprintf(fpAvgLand, "    Time    Average Hare Density    Average Puma Density\n");
   fprintf(fpAvgGrid, "    Time    Average Hare Density    Average Puma Density\n");
 
@@ -152,6 +166,10 @@ int main(int argc, char **argv) {
   newGameLand->x = gameLand->x;
   newGameLand->y = gameLand->y;
   newGameLand->map = dynamic_alloc_map(newGameLand->x, newGameLand->y);
+
+/**
+  *Explain this
+  */
 
   for (i = 0; i < newGameLand->x; i++)
   {
@@ -173,7 +191,9 @@ int main(int argc, char **argv) {
     newGameLand->map[newGameLand->x - 1][j].pumas = 0.0;
   }
 
-// calculating the number of grid points that are land
+/**
+*calculating the number of grid points that are land
+*/
   for (i = 1; i < gameLand->x; i++) {
     for (j = 1; j < gameLand->y; j++) {
         if (gameLand->map[i][j].area == LAND) {
@@ -217,7 +237,10 @@ grid_number = (gameLand->x - 2)*(gameLand->y - 2);
 
     }
 
-		//swap the arrays
+		/**
+		*swap the arrays
+		*
+		*/
     swap = gameLand->map;
     gameLand->map = newGameLand->map;
     newGameLand->map = swap;
