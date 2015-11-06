@@ -7,8 +7,8 @@
  *
  *  \author B083194
  *  \author B084292
- *  \author B
- *  \author B
+ *  \author B082906
+ *  \author B088321
  *  \date 06/11/12
  *  \bug No known bugs.
  */
