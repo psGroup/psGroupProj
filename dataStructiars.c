@@ -54,7 +54,6 @@ void init_map(FILE *fp, struct_matrix *gameLand) {
   size_t len = 0;
   ssize_t read;
   int nx, ny, i, j;
-
   /**
   * \brief talk awhat happens next
   */
