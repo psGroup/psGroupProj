@@ -28,12 +28,12 @@ double haresNeighboursCells(const struct_matrix *gameLand, int i, int j) {
 double haresNewValue(struct_matrix *gameLand, int i, int j) {
   double oldValue = gameLand->map[i][j].hares;
   double newValue = 0.0;
-  double NeighboursHaresValues = haresNeighboursCells(gameLand, i, j);
-  double NeighboursLandCells = landNeighboursCells(gameLand, i, j);
+  double neibarsHaresValues = haresNeighboursCells(gameLand, i, j);
+  double neibarsLandCells = landNeighboursCells(gameLand, i, j);
   double randomWalk = 0.0;
 
   //randomWalk
-  randomWalk = k * (NeighboursHaresValues - (NeighboursLandCells * oldValue));
+  randomWalk = k * (neibarsHaresValues - (neibarsLandCells * oldValue));
 
   newValue = ((r*oldValue) - a * oldValue * gameLand->map[i][j].pumas);
   newValue += randomWalk;
@@ -53,12 +53,12 @@ double pumasNeighboursCells(const struct_matrix *gameLand, int i, int j) {
 double pumasNewValue(struct_matrix *gameLand, int i, int j) {
   double oldValue = gameLand->map[i][j].pumas;
   double newValue = 0.0;
-  double NeighboursPumasValues = pumasNeighboursCells(gameLand, i, j);
-  double NeighboursLandCells = landNeighboursCells(gameLand, i, j);
+  double neibarsPumasValues = pumasNeighboursCells(gameLand, i, j);
+  double neibarsLandCells = landNeighboursCells(gameLand, i, j);
   double randomWalk = 0.0;
 
   //randomWalk
-  randomWalk = l * (NeighboursPumasValues - (NeighboursLandCells * oldValue));
+  randomWalk = l * (neibarsPumasValues - (neibarsLandCells * oldValue));
 
   newValue = (b*oldValue * gameLand->map[i][j].hares) - m * oldValue;
   newValue += randomWalk;
@@ -68,7 +68,7 @@ double pumasNewValue(struct_matrix *gameLand, int i, int j) {
   return newValue;
 }
 
-void mainLoop(struct_matrix *gameLand, struct_matrix *newGameLand) {
+void mainLoop(struct_matrix *gameLand, struct_matrix *newGameLand, double *totalHares, double *totalPumas) {
 
   struct_matrix *tempPtr;
 	int i, j;
@@ -81,6 +81,10 @@ void mainLoop(struct_matrix *gameLand, struct_matrix *newGameLand) {
 					newGameLand->map[i][j].hares = haresNewValue(gameLand, i ,j);
 					newGameLand->map[i][j].pumas = pumasNewValue(gameLand, i ,j);
 
+          // calculate average over grid
+          (*totalHares) += newGameLand->map[i][j].hares;
+          (*totalPumas) += newGameLand->map[i][j].pumas;
+
 					// if statements to check critical densities
 					if(gameLand->map[i][j].hares < crit_hares_lower){gameLand->map[i][j].hares = 0.0;}
 					else if(gameLand->map[i][j].hares > crit_hares_upper){gameLand->map[i][j].hares = crit_hares_upper;}
@@ -90,3 +94,20 @@ void mainLoop(struct_matrix *gameLand, struct_matrix *newGameLand) {
 			}
 		}
 }
+
+/*void average_hares(land_number){
+  double total_hares = 0.0;
+  double avg_hares = 0.0;
+
+  for (i = 1; i < gameLand->x; i++) {
+    for (j = 1; j < gameLand->y; j++) {
+  		newGameLand->map[i][j].area = gameLand->map[i][j].area;
+				if (gameLand->map[i][j].area == LAND) {
+
+          total_hares += gameLand->map[i][j].hares;
+        }
+      }
+    }
+    avg_hares = total_hares/land_number;
+  }
+*/
