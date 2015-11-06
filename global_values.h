@@ -56,9 +56,24 @@ typedef struct configurations_struct {
   double grid_number;
 }configurations;
 
+
+
 configurations parse_configs(FILE *fp);
 
+/** \fn print_configs
+ * \brief  brief description of what the fucntion does
+ *
+ *
+ * A more detailed description could go here
+ *
+ * \return Void. 
+ *
+ *
+ */
+
 void print_configs(configurations config);
+
+
 
 int isOnlyWiteSpace(char *str, size_t len);
 #endif /* GLOBAL_VALUES */
