@@ -1,3 +1,13 @@
+/** \file configFile
+ *  \brief These are parameters used in the equations and in printing the ppm files.
+ * The values used were recommended on the coursework handout instruction sheet.
+ *  \author B083194
+ *  \author B084292
+ *  \author B
+ *  \author B
+ *  \date 06/11/12
+ */
+
 dt 0.4
 r 0.08
 a 0.04
