@@ -4,7 +4,7 @@
  *
  *  \author B083194
  *  \author B084292
- *  \author B
+ *  \author B082906
  *  \author B
  *  \date 06/11/12
  *  \bug No known bugs.
@@ -13,10 +13,7 @@
 #include "equations.h"
 
 /** \fn landNeighboursCells
- * \brief  brief description of what the fucntion does
- *
- *
- * A more detailed description could go here
+ * \brief  Calculate number of nearest neighbour land cells 
  *
  *
  * \return n
@@ -27,7 +24,7 @@ double landNeighboursCells(const struct_matrix *gameLand/**< [in] docs for input
   double n = 0.0;
   
   /**
-  *explain for loop
+  *count only if neighbour is land
   */
 
   if (gameLand->map[i-1][j].area == LAND)
@@ -46,12 +43,9 @@ double landNeighboursCells(const struct_matrix *gameLand/**< [in] docs for input
 }
 
 /** \fn haresNeighboursCells
- * \brief  brief description of what the fucntion does
+ * \brief  Sums total hares density from nearest neighbours
  *
- *
- * A more detailed description could go here
- *
- *
+ 
  * \return Void
  *
  */
@@ -64,11 +58,7 @@ double haresNeighboursCells(const struct_matrix *gameLand, int i, int j) {
 }
 
 /** \fn haresNewValue
- * \brief  brief description of what the fucntion does
- *
- *
- * A more detailed description could go here
- *
+ * \brief  calculates the updated cell value for hares
  *
  * \return newValue.
  *
@@ -81,7 +71,7 @@ double haresNewValue(struct_matrix *gameLand, int i, int j, configurations confi
   double neibarsLandCells = landNeighboursCells(gameLand, i, j);
   double randomWalk = 0.0;
 
-  /** explain random walk */
+  /** Animal population diffuses spatially via a random walk */
   randomWalk = configs.k * (neibarsHaresValues - (neibarsLandCells * oldValue));
 
   newValue = ((configs.r*oldValue) - configs.a * oldValue * gameLand->map[i][j].pumas);
@@ -93,10 +83,7 @@ double haresNewValue(struct_matrix *gameLand, int i, int j, configurations confi
 }
 
 /** \fn pumasNeighboursCells
- * \brief  brief description of what the fucntion does
- *
- *
- * A more detailed description could go here
+ * \brief  Sums total pumas density from nearest neighbours
  *
  *
  * \return Void
@@ -111,12 +98,7 @@ double pumasNeighboursCells(const struct_matrix *gameLand, int i, int j) {
 }
 
 /** \fn pumasNewValue
- * \brief  brief description of what the fucntion does
- *
- *
- * A more detailed description could go here
- *
- *
+ * \brief  calculates the updated cell value for pumas
  * \return newValue.
  *
  */
@@ -128,7 +110,6 @@ double pumasNewValue(struct_matrix *gameLand, int i, int j, configurations confi
   double neibarsLandCells = landNeighboursCells(gameLand, i, j);/**< Explain */
   double randomWalk = 0.0;/**< Explain */
 
-  //randomWalk
   randomWalk = configs.l * (neibarsPumasValues - (neibarsLandCells * oldValue));
 
   newValue = (configs.b*oldValue * gameLand->map[i][j].hares) - configs.m * oldValue;
@@ -140,12 +121,12 @@ double pumasNewValue(struct_matrix *gameLand, int i, int j, configurations confi
 }
 
 /** \fn mainLoop
- * \brief  brief description of what the fucntion does
+ * \brief  Primary spatial iterative update
  *
  *
- * A more detailed description could go here
- *
- *
+ * Loops over all grid points and calculates the new values
+ * for hares and pumas, if the cell is on land. 
+ * 
  * \return Void.
  *
  */
@@ -163,13 +144,12 @@ void mainLoop(struct_matrix *gameLand, struct_matrix *newGameLand, double *total
 
 
 /**
-	* Explain next bit
+	* Total hares to calculate averages
 	*/
-          // calculate average over grid
           (*totalHares) += newGameLand->map[i][j].hares;
           (*totalPumas) += newGameLand->map[i][j].pumas;
 
-					// if statements to check critical densities
+					/** if statements to check critical densities */
 					if (gameLand->map[i][j].hares < configs.crit_hares_lower) {
 						gameLand->map[i][j].hares = 0.0;
 					}
