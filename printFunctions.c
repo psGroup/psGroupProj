@@ -1,11 +1,35 @@
+/** \file printFunctions.c
+ *  \brief Explain
+ *
+ *   explain
+ *
+ *  \author B083194
+ *  \author B084292
+ *  \author B
+ *  \author B
+ *  \date 06/11/12
+ *  \bug No known bugs.
+ */
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <math.h>
 #include "printFunctions.h"
 
-void printPPM(struct_matrix *gameLand, char *hares_directory, 
-					char *pumas_directory, char *together_directory, configurations configs) {
+/** \fn printPPM
+ * \brief  brief description of what the fucntion does
+ *
+ *
+ * A more detailed description could go here
+ *
+ *
+ *
+ *
+ */
+
+void printPPM(struct_matrix *gameLand/**<[in] Explain */, char *hares_directory/**<[in] Explain */, 
+					char *pumas_directory/**<[in] Explain */, char *together_directory/**<[in] Explain */, configurations configs/**<[in] Explain */) {
   
    static int fileID = 0;
   int i, j;
@@ -43,7 +67,8 @@ void printPPM(struct_matrix *gameLand, char *hares_directory,
   fprintf(fpPumas, "P3\n%d %d\n255\n", gameLand->y - 2, gameLand->x - 2);
   fprintf(fpTogether, "P3\n%d %d\n255\n", gameLand->y - 2, gameLand->x - 2);
 
-// the ppm colour values that the densities will be mapped to
+/** explain the next bit */
+
   int pumas_ppm;
   int hares_ppm;
 
@@ -80,7 +105,19 @@ void printPPM(struct_matrix *gameLand, char *hares_directory,
   fclose(fpTogether);
 }
 
-void printMapToImg(struct_matrix *gameLand, char initFileName[30]) {
+/** \fn printMapToImage
+ * \brief  brief description of what the fucntion does
+ *
+ *
+ * A more detailed description could go here
+ *
+ *
+ *
+ *
+ */
+
+
+void printMapToImg(struct_matrix *gameLand/**<[in] Explain */, char initFileName[30]/**<[in] Explain */) {
   static int fileID = 0;
   int i, j;
   FILE *fp;
@@ -228,10 +265,32 @@ void printPumas(struct_matrix *gameLand) { //}, char initFileName[30]) { //246, 
 
 }
 
+/** \fn printLandAvg
+ * \brief  brief description of what the fucntion does
+ *
+ *
+ * A more detailed description could go here
+ *
+ *
+ *
+ *
+ */
+
 void printLandAvg(FILE *fp, double t, double avgHaresLand, double avgPumasLand) {
   fprintf(fp, "%8.2f%24.2f%24.2f\n", t, avgHaresLand, avgPumasLand);
 
 }
+
+/** \fn printGridAvg
+ * \brief  brief description of what the fucntion does
+ *
+ *
+ * A more detailed description could go here
+ *
+ *
+ *
+ *
+ */
 
 void printGridAvg(FILE *fp, double t, double avgHaresGrid, double avgPumasGrid) {
   fprintf(fp, "%8.2f%24.2f%24.2f\n", t, avgHaresGrid, avgPumasGrid);
